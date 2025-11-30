@@ -5,7 +5,7 @@ String? savedToken;
 class DioHelper {
   late Dio dio;
   DioHelper() {
-    BaseOptions baseOptions = BaseOptions(
+    final BaseOptions baseOptions = BaseOptions(
       //    baseUrl: ApiEndpoints.baseUrl,
       receiveDataWhenStatusError: true,
       connectTimeout: const Duration(seconds: 20),

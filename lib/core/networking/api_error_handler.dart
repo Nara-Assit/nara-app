@@ -60,7 +60,6 @@ class ApiErrorHandler {
           }
 
         case DioExceptionType.unknown:
-        default:
           return _handleUnknownError(error);
       }
     } else {

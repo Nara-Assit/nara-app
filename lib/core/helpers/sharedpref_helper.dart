@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedprefHelper {
   static late SharedPreferences sharedPref;
-  static cacheInitialization() async {
+  static Future<void> cacheInitialization() async {
     sharedPref = await SharedPreferences.getInstance();
   }
 
@@ -28,7 +28,7 @@ class SharedprefHelper {
     return sharedPref.getBool(key) ?? false;
   }
 
-  static setSecurityString(String key, String value) async {
+  static Future<void> setSecurityString(String key, String value) async {
     const flutterSecureStorage = FlutterSecureStorage();
     debugPrint('Storing key: $key with value: $value');
     await flutterSecureStorage.write(key: key, value: value);
@@ -39,7 +39,7 @@ class SharedprefHelper {
     return await flutterSecureStorage.read(key: key);
   }
 
-  static clearAllSecuredData() async {
+  static Future<void> clearAllSecuredData() async {
     debugPrint('FlutterSecureStorage : all data has been cleared');
     const flutterSecureStorage = FlutterSecureStorage();
     await flutterSecureStorage.delete(key: "savedToken");
