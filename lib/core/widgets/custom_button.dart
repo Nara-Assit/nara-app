@@ -43,6 +43,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:nara/core/theming/color_manager.dart';
+import 'package:nara/core/theming/text_style_manager.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -53,6 +54,7 @@ class CustomButton extends StatelessWidget {
     this.width,
     this.hight,
     this.image,
+    this.radius,
     this.onTap,
   });
 
@@ -62,6 +64,8 @@ class CustomButton extends StatelessWidget {
   final double? width;
   final double? hight;
   final String? image;
+  final double? radius;
+
   final void Function()? onTap;
 
   @override
@@ -74,7 +78,7 @@ class CustomButton extends StatelessWidget {
         width: width ?? double.infinity,
         decoration: BoxDecoration(
           color: color ?? ColorManager.primaryColor1,
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(radius ?? 16.r),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -85,10 +89,8 @@ class CustomButton extends StatelessWidget {
             ],
             Text(
               title,
-              style: TextStyle(
+              style: TextStyleManager.font16MediumBlack.copyWith(
                 color: textColor ?? const Color(0xffFFFFFF),
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
               ),
             ),
           ],
