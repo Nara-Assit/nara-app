@@ -1,10 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/helpers/app_assets.dart';
+import 'package:nara/core/navigation/navigator.dart';
+import 'package:nara/features/onboarding/onboarding_screen.dart';
 
-import '../login/login_screen.dart';
+import '../signin/signin_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,11 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      );
+    Future.delayed(const Duration(seconds: 3), () {
+      Go.offAll(const OnBoardingScreen());
     });
   }
 
@@ -35,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: .center,
           children: [
             Image.asset(AppAssets.imagesSplashLogo),
-            Image.asset(AppAssets.imagesNara),
+            // Image.asset(AppAssets.imagesNara),
           ],
         ),
       ),
