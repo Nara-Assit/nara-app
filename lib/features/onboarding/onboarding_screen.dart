@@ -5,6 +5,7 @@ import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/theming/color_manager.dart';
 import 'package:nara/core/theming/text_style_manager.dart';
 import 'package:nara/features/onboarding/models/onboarding_model.dart';
+import 'package:nara/features/onboarding/widgets/on_boarding_item.dart';
 import 'package:nara/features/sign_in_up/sign_in_up_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -60,7 +61,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                 ),
                 GestureDetector(
-                  // onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const OnBoardingScreen()));},
+                  onTap: () {
+                    if (_controller.page ==
+                        OnboardingModel.onboardingPages.length - 1) {
+                      Go.offAll(const SignInUpScreen());
+                      return;
+                    }
+                    _controller.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
                   child: Image.asset(AppAssets.imagesNextArrow),
                 ),
               ],
@@ -69,31 +80,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           SizedBox(height: 100.h),
         ],
       ),
-    );
-  }
-}
-
-class OnBoardingItem extends StatelessWidget {
-  final OnboardingModel onboardingModel;
-  const OnBoardingItem({super.key, required this.onboardingModel});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: .center,
-      children: [
-        SizedBox(height: 210.h),
-        Image.asset(onboardingModel.imagePath),
-        SizedBox(height: 65.h),
-        Text(onboardingModel.title, style: TextStyleManager.font20BoldBlack),
-        SizedBox(height: 20.h),
-        Text(
-          textAlign: .center,
-          onboardingModel.description,
-          style: TextStyleManager.font14RegularBlack,
-        ),
-        SizedBox(height: 30.h),
-      ],
     );
   }
 }
