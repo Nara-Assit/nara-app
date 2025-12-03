@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/features/sms_code/widgets/enter_otp_widget.dart';
+import 'package:nara/features/verify/compeleted_screen.dart';
 import '../../core/helpers/app_assets.dart';
-import '../../core/theming/color_manager.dart';
 import '../../core/theming/text_style_manager.dart';
 import '../../core/widgets/custom_button.dart';
 
@@ -65,7 +65,7 @@ class _SmsCodeScreenState extends State<SmsCodeScreen> {
                     title: "تأكيد",
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        //  Go.to(page)
+                        Go.to(const CompeletedScreen());
                       }
                     },
                   ),
