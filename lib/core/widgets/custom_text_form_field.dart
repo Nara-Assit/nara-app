@@ -57,7 +57,7 @@ class CustomTextFormField extends StatelessWidget {
             hintText: textHint,
             contentPadding:
                 contentPadding ??
-                EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+                EdgeInsets.symmetric(vertical: 17.h, horizontal: 20.w),
             hintStyle: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,

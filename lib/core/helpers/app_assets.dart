@@ -24,7 +24,11 @@ class AppAssets {
 
   static const String imagesAndroid12SplashLogo = "assets/images/android_12_splash_logo.png";
 
+  static const String imagesBackArrow = "assets/images/back_arrow.png";
+
   static const String imagesCompeleteAvatar = "assets/images/compelete_avatar.png";
+
+  static const String imagesCompeleteIcon = "assets/images/compelete_icon.png";
 
   static const String imagesFacebook = "assets/images/facebook.png";
 
@@ -53,6 +57,8 @@ class AppAssets {
   static const String imagesSurprise = "assets/images/Surprise.png";
 
   static const String imagesTextfeildIcon = "assets/images/textfeild_icon.png";
+
+  static const String imagesUserphoto = "assets/images/userphoto.png";
 
   static const String imagesVerifyAvatar = "assets/images/verify_avatar.png";
 }

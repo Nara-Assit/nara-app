@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/helpers/app_assets.dart';
-import 'package:nara/core/navigation/Transition/implementation/fade/Option/fade_animation_option.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/core/theming/color_manager.dart';
 import 'package:nara/core/theming/text_style_manager.dart';
 import 'package:nara/core/widgets/custom_button.dart';
-import 'package:nara/features/signin/signin_screen.dart';
+import 'package:nara/features/auth/auth_screen.dart';
 
 class SignInUpScreen extends StatelessWidget {
   const SignInUpScreen({super.key});
@@ -31,15 +30,20 @@ class SignInUpScreen extends StatelessWidget {
               SizedBox(height: 95.h),
               CustomButton(
                 title: "تسجيل الدخول",
-                textColor: Colors.black,
                 onTap: () {
-                  Go.to(const SignInScreen());
+                  Go.to(const AuthScreen());
                 },
               ),
               SizedBox(height: 16.h),
-              const CustomButton(
+              CustomButton(
                 title: "انشاء حساب",
                 color: ColorManager.primaryColor,
+                textColor: Colors.white,
+                onTap: () {
+                  Go.to(
+                    const AuthScreen(index: 1),
+                  );
+                },
               ),
             ],
           ),

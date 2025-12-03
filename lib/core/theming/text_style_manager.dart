@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../helpers/app_constatnts.dart';
 import 'color_manager.dart';
 
 class TextStyleManager {
@@ -60,7 +61,7 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.secondColor,
   );
- 
+
   static TextStyle font24Bold = TextStyle(
     fontSize: 24.sp,
     fontWeight: FontWeight.bold,
@@ -71,7 +72,7 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.whiteColors,
   );
-   static TextStyle font16MediumBlack = TextStyle(
+  static TextStyle font16MediumBlack = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     color: ColorManager.secondColor,
@@ -81,7 +82,7 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.whiteColors,
   );
-   static TextStyle font16BoldBlack = TextStyle(
+  static TextStyle font16BoldBlack = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.bold,
     color: ColorManager.secondColor,
@@ -90,6 +91,11 @@ class TextStyleManager {
     fontSize: 14.sp,
     fontWeight: FontWeight.bold,
     color: ColorManager.whiteColors,
+  );
+  static TextStyle font14RegularPrimaryColor = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: ColorManager.primaryColor,
   );
   static TextStyle font14SemiBoldWhite = TextStyle(
     fontSize: 14.sp,
@@ -102,6 +108,13 @@ class TextStyleManager {
     color: ColorManager.secondColor,
   );
   static TextStyle font20BoldPrimaryColor = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.bold,
+    color: ColorManager.primaryColor,
+  );
+
+  static TextStyle appBarTitle = TextStyle(
+    fontFamily: AppConstants.fontFamily,
     fontSize: 20.sp,
     fontWeight: FontWeight.bold,
     color: ColorManager.primaryColor,
