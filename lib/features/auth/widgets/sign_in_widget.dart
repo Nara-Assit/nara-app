@@ -6,58 +6,8 @@ import 'package:nara/core/theming/text_style_manager.dart';
 import 'package:nara/core/widgets/custom_button.dart';
 import 'package:nara/core/widgets/custom_text_form_field.dart';
 
-class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Column(
-            children: [
-              SizedBox(height: 50.h),
-              const TabBar(
-                indicatorSize: .tab,
-                indicatorWeight: 3,
-                dividerColor: ColorManager.secondColor,
-                dividerHeight: 1.2,
-                tabs: [
-                  Tab(
-                    child: Text(
-                      "تسجيل الدخول",
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      "انشاء حساب",
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 50.h),
-              Expanded(
-                child: TabBarView(
-                  children: [
-                    const LoginWidget(),
-                    Container(
-                      color: Colors.red,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LoginWidget extends StatelessWidget {
-  const LoginWidget({
+class SignInWidget extends StatelessWidget {
+  const SignInWidget({
     super.key,
   });
 
@@ -81,7 +31,6 @@ class LoginWidget extends StatelessWidget {
           SizedBox(height: 90.h),
           const CustomButton(
             title: "تسجيل الدخول",
-            textColor: Colors.black,
           ),
           SizedBox(height: 75.h),
           Row(
@@ -113,13 +62,13 @@ class LoginWidget extends StatelessWidget {
               CustomButton(
                 title: "جوجل",
                 image: AppAssets.imagesGoogle,
-                textColor: Colors.black,
                 width: 112.w,
                 radius: 25.r,
               ),
               CustomButton(
                 color: ColorManager.primaryColor,
                 title: "فيسبوك",
+                textColor: Colors.white,
                 image: AppAssets.imagesFacebook,
                 width: 142.w,
                 radius: 25.r,
