@@ -5,37 +5,31 @@ import 'package:nara/features/sms_code/sms_code_screen.dart';
 import '../../core/helpers/app_assets.dart';
 import '../../core/theming/text_style_manager.dart';
 import '../../core/widgets/custom_button.dart';
-import '../../core/widgets/custom_text_form_field.dart';
 
-class VerifyViaEmailScreen extends StatelessWidget {
-  const VerifyViaEmailScreen({super.key});
+class CompeletedScreen extends StatelessWidget {
+  const CompeletedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: SizedBox(
         width: .infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 25.w),
           child: Column(
             children: [
-              Image.asset(AppAssets.imagesVerifyAvatar),
-              SizedBox(height: 25.h),
+              SizedBox(height: 158.h),
+              Image.asset(AppAssets.imagesCompeleteAvatar),
+              SizedBox(height: 85.h),
               Text(
                 textAlign: .center,
-                "ادخل بريدك الالكترونى للتحقق\n من هويتك",
+                "تم انشاء الحساب لنبدأ رحتلنا\n معاً!!",
                 style: TextStyleManager.font20BoldBlack,
               ),
-              SizedBox(height: 72.h),
-              CustomTextFormField(
-                textHint: "ادخل بريدك الالكترونى",
-                icon: Image.asset(AppAssets.imagesTextfeildIcon),
-                headerTitle: "البريد الالكترونى",
-              ),
-              SizedBox(height: 72.h),
+
+              SizedBox(height: 95.h),
               CustomButton(
-                title: "ارسال الكود",
+                title: "بدأ",
                 onTap: () {
                   Go.to(const SmsCodeScreen());
                 },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nara/core/widgets/custom_back_button.dart';
 import 'package:nara/features/verify/verify_via_email_screen.dart';
 import 'package:nara/features/verify/verify_via_number_screen.dart';
 import '../../core/helpers/app_assets.dart';
