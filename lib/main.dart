@@ -6,6 +6,7 @@ import 'package:nara/features/onboarding/onboarding_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
 
 import 'core/navigation/app_navigation_observer.dart';
+import 'core/theming/theme_manager.dart';
 
 void main() {
   runApp(const NaraApp());
@@ -30,12 +31,7 @@ class NaraApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           title: 'Flutter Demo',
-          theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
-
-            fontFamily: 'Alexandria',
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
+          theme: ThemeManager().lightTheme,
           navigatorObservers: [AppNavigationObserver()],
           home: const SplashScreen(),
         );
