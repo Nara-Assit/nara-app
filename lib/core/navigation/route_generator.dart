@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nara/features/signin/signin_screen.dart';
+import 'package:nara/features/auth/auth_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
 import 'named_routes.dart';
@@ -26,7 +26,7 @@ class RouterGenerator {
           settings: settings,
         ),
         NamedRoutes.login => _pageRouter.build(
-          const SignInScreen(),
+          const AuthScreen(),
           settings: settings,
         ),
       };
