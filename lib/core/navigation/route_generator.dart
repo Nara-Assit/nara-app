@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nara/features/bottomnavbar/ui/bottom_nav_bar.dart';
 import 'package:nara/features/signin/signin_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
@@ -27,6 +28,10 @@ class RouterGenerator {
         ),
         NamedRoutes.login => _pageRouter.build(
           const SignInScreen(),
+          settings: settings,
+        ),
+        NamedRoutes.bottomNavBar => _pageRouter.build(
+          const BottomNavBarScreen(),
           settings: settings,
         ),
       };

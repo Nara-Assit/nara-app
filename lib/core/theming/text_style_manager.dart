@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'color_manager.dart';
 
 class TextStyleManager {
@@ -60,7 +59,7 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.secondColor,
   );
- 
+
   static TextStyle font24Bold = TextStyle(
     fontSize: 24.sp,
     fontWeight: FontWeight.bold,
@@ -71,7 +70,7 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.whiteColors,
   );
-   static TextStyle font16MediumBlack = TextStyle(
+  static TextStyle font16MediumBlack = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     color: ColorManager.secondColor,
@@ -81,10 +80,15 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.whiteColors,
   );
-   static TextStyle font16BoldBlack = TextStyle(
+  static TextStyle font16BoldBlack = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.bold,
     color: ColorManager.secondColor,
+  );
+  static TextStyle font12RegularWhite = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: ColorManager.whiteColors,
   );
   static TextStyle font14BoldWhite = TextStyle(
     fontSize: 14.sp,
@@ -105,5 +109,10 @@ class TextStyleManager {
     fontSize: 20.sp,
     fontWeight: FontWeight.bold,
     color: ColorManager.primaryColor,
+  );
+  static TextStyle font14RegularYellowColor = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: ColorManager.yellowColor,
   );
 }

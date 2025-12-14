@@ -29,7 +29,7 @@ class NaraApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          title: 'Flutter Demo',
+          title: 'Nara App',
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.white,
 
