@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nara/core/navigation/navigator.dart';
-import 'package:nara/features/onboarding/onboarding_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
-
 import 'core/navigation/app_navigation_observer.dart';
 import 'core/theming/theme_manager.dart';
 
