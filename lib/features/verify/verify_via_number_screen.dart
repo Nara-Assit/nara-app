@@ -18,30 +18,43 @@ class VerifyViaNumberScreen extends StatelessWidget {
         width: .infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 25.w),
-          child: Column(
-            children: [
-              Image.asset(AppAssets.imagesVerifyAvatar),
-              SizedBox(height: 25.h),
-              Text(
-                textAlign: .center,
-                "ادخل رقمك للتحقق من هويتك",
-                style: TextStyleManager.font20BoldBlack,
-              ),
-              SizedBox(height: 72.h),
-              CustomTextFormField(
-                textHint: "ادخل رقم هاتفك",
-                icon: Image.asset(AppAssets.imagesTextfeildIcon),
-                headerTitle: "رقم الهاتف",
-              ),
-              SizedBox(height: 72.h),
-              CustomButton(
-                title: "ارسال الكود",
-                onTap: () {
-                  Go.to(const SmsCodeScreen());
-                },
-              ),
-              SizedBox(height: 47.h),
-            ],
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Image.asset(AppAssets.imagesVerifyAvatar),
+                SizedBox(height: 25.h),
+                Text(
+                  textAlign: .center,
+                  "ادخل رقمك للتحقق من هويتك",
+                  style: TextStyleManager.font20BoldBlack,
+                ),
+                SizedBox(height: 72.h),
+                CustomTextFormField(
+                  textHint: "ادخل رقم هاتفك",
+                  headerTitle: "رقم الهاتف",
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء ادخال رقم الهاتف';
+                    }
+                    final phoneRegExp = RegExp(r'^\+?[0-9]{7,15}$');
+                    if (!phoneRegExp.hasMatch(value)) {
+                      return 'الرجاء ادخال رقم هاتف صحيح';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 72.h),
+                CustomButton(
+                  title: "ارسال الكود",
+                  onTap: () {
+                    Go.to(const SmsCodeScreen());
+                  },
+                ),
+                SizedBox(height: 47.h),
+              ],
+            ),
           ),
         ),
       ),

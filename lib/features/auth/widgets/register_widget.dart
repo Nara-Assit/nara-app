@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/helpers/app_assets.dart';
+import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/core/theming/color_manager.dart';
 import 'package:nara/core/theming/text_style_manager.dart';
 import 'package:nara/core/widgets/custom_button.dart';
 import 'package:nara/core/widgets/custom_text_form_field.dart';
+import 'package:nara/features/compelete_registration/compelete_registration_screen.dart';
 
-class SignInWidget extends StatelessWidget {
-  const SignInWidget({
+import '../../../core/helpers/validators.dart';
+
+class RegisterWidget extends StatelessWidget {
+  RegisterWidget({
     super.key,
   });
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+  final TextEditingController confirmPassController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,21 +26,52 @@ class SignInWidget extends StatelessWidget {
       child: Column(
         children: [
           CustomTextFormField(
+            textHint: "ادخل اسمك",
+            headerTitle: "الاسم",
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'الرجاء ادخال الاسم';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 25.h),
+          CustomTextFormField(
             textHint: "ادخل بريدك الالكترونى",
-            icon: Image.asset(AppAssets.imagesTextfeildIcon),
             headerTitle: "البريد الالكترونى",
+            controller: emailController,
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) => Validators.validateEmail(value),
+          ),
+          SizedBox(height: 25.h),
+          CustomTextFormField(
+            textHint: "انشى كلمة مرور",
+            headerTitle: "كلمة المرور",
+            controller: passController,
+            isPassword: true,
+            keyboardType: TextInputType.visiblePassword,
+            validator: (value) => Validators.validatePassword(value),
+          ),
+          SizedBox(height: 25.h),
+          CustomTextFormField(
+            textHint: "ادخل كلمة المرور",
+            headerTitle: "تأكيد كلمة المرور",
+            controller: confirmPassController,
+            isPassword: true,
+            keyboardType: TextInputType.visiblePassword,
+            validator: (value) => Validators.validatepasswordConfirmation(
+              value,
+              passController.text,
+            ),
           ),
           SizedBox(height: 35.h),
-          CustomTextFormField(
-            textHint: "ادخل كلمة مرورك",
-            icon: Image.asset(AppAssets.imagesTextfeildIcon),
-            headerTitle: "كلمة المرور",
+          CustomButton(
+            title: "انشاء حساب",
+            onTap: () {
+              Go.to(CompeleteRegistrationScreen());
+            },
           ),
-          SizedBox(height: 90.h),
-          const CustomButton(
-            title: "تسجيل الدخول",
-          ),
-          SizedBox(height: 75.h),
+          SizedBox(height: 30.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 5.w,
@@ -55,7 +94,7 @@ class SignInWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 75.h),
+          SizedBox(height: 30.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

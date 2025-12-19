@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'api_error_model.dart';
 
 class ApiErrorHandler {
-  static ApiErrorModel handle(dynamic error) {
+  static ApiErrorModel handle(dynamic error, [StackTrace? stackTrace]) {
     if (error is DioException) {
-      switch (error.type) {
+      final dioError = error;
+      switch (dioError.type) {
         case DioExceptionType.connectionTimeout:
           return ApiErrorModel(
             message: "انتهت مهلة الاتصال. من فضلك حاول مرة أخرى لاحقًا.",
@@ -40,15 +44,39 @@ class ApiErrorHandler {
           );
 
         case DioExceptionType.badResponse:
-          final response = error.response;
+          final response = dioError.response;
           if (response != null) {
             final statusCode = response.statusCode ?? 500;
 
             String message = "حدث خطأ غير متوقع من الخادم.";
-            if (response.data is Map && response.data['message'] != null) {
-              message = _translateMessage(response.data['message']);
+            // Handle typical validation error structure: { errors: [{ field, message }, ...] }
+            if (response.data is Map) {
+              final data = response.data as Map;
+              if (data['errors'] != null && data['errors'] is List) {
+                try {
+                  final errors = List.from(data['errors'] as List);
+                  final messages = errors
+                      .map((e) {
+                        if (e is Map && e['message'] != null) {
+                          return e['message'].toString();
+                        }
+                        return e.toString();
+                      })
+                      .where((m) => m.isNotEmpty)
+                      .toList();
+                  if (messages.isNotEmpty) {
+                    message = messages.join('\n');
+                  }
+                } catch (_) {
+                  // fallback to generic message on parse errors
+                }
+              } else if (data['message'] != null) {
+                message = _translateMessage(data['message'].toString());
+              } else if (data['error'] != null) {
+                message = _translateMessage(data['error'].toString());
+              }
             } else if (response.data is String) {
-              message = _translateMessage(response.data);
+              message = _translateMessage(response.data as String);
             }
 
             return ApiErrorModel(message: message, statusCode: statusCode);
@@ -60,21 +88,28 @@ class ApiErrorHandler {
           }
 
         case DioExceptionType.unknown:
-          return _handleUnknownError(error);
+          return _handleUnknownError(dioError, stackTrace);
       }
-    } else {
-      return ApiErrorModel(message: "حدث خطأ غير متوقع.", statusCode: 500);
     }
+    return _handleUnknownError(error, stackTrace);
   }
 
-  static ApiErrorModel _handleUnknownError(dynamic error) {
-    if (error is Error) {
-      return ApiErrorModel(message: error.toString(), statusCode: 500);
+  static ApiErrorModel _handleUnknownError(
+    dynamic error, [
+    StackTrace? stackTrace,
+  ]) {
+    final baseMessage = (error is Error || error is Exception)
+        ? error.toString()
+        : "حدث خطأ غير معروف. حاول مرة أخرى لاحقًا.";
+
+    if (kDebugMode && stackTrace != null) {
+      final messageWithTrace =
+          '$baseMessage\n\nStackTrace:\n${stackTrace.toString()}';
+      log(messageWithTrace, error: error);
+      return ApiErrorModel(message: messageWithTrace, statusCode: 500);
     }
-    return ApiErrorModel(
-      message: "حدث خطأ غير معروف. حاول مرة أخرى لاحقًا.",
-      statusCode: 500,
-    );
+
+    return ApiErrorModel(message: baseMessage, statusCode: 500);
   }
 
   static String _translateMessage(String message) {

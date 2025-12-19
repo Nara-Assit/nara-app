@@ -11,4 +11,8 @@ class ApiErrorModel {
   Map<String, dynamic> toJson() {
     return {'message': message, 'statusCode': statusCode};
   }
+
+  @override
+  String toString() =>
+      '''ApiErrorModel(message: $message, statusCode: $statusCode)''';
 }

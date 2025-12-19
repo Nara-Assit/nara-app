@@ -48,6 +48,8 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   pinput: ^6.0.1
   google_fonts: ^6.3.3
+  talker_dio_logger: ^5.1.5
+  fluttertoast: ^9.0.0
 
 dev_dependencies:
   flutter_test:

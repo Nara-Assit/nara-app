@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nara/core/helpers/validators.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/features/sms_code/sms_code_screen.dart';
 import '../../core/helpers/app_assets.dart';
@@ -18,30 +19,34 @@ class VerifyViaEmailScreen extends StatelessWidget {
         width: .infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 25.w),
-          child: Column(
-            children: [
-              Image.asset(AppAssets.imagesVerifyAvatar),
-              SizedBox(height: 25.h),
-              Text(
-                textAlign: .center,
-                "ادخل بريدك الالكترونى للتحقق\n من هويتك",
-                style: TextStyleManager.font20BoldBlack,
-              ),
-              SizedBox(height: 72.h),
-              CustomTextFormField(
-                textHint: "ادخل بريدك الالكترونى",
-                icon: Image.asset(AppAssets.imagesTextfeildIcon),
-                headerTitle: "البريد الالكترونى",
-              ),
-              SizedBox(height: 72.h),
-              CustomButton(
-                title: "ارسال الكود",
-                onTap: () {
-                  Go.to(const SmsCodeScreen());
-                },
-              ),
-              SizedBox(height: 47.h),
-            ],
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                Image.asset(AppAssets.imagesVerifyAvatar),
+                SizedBox(height: 25.h),
+                Text(
+                  textAlign: .center,
+                  "ادخل بريدك الالكترونى للتحقق\n من هويتك",
+                  style: TextStyleManager.font20BoldBlack,
+                ),
+                SizedBox(height: 72.h),
+                CustomTextFormField(
+                  textHint: "ادخل بريدك الالكترونى",
+                  headerTitle: "البريد الالكترونى",
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) => Validators.validateEmail(value),
+                ),
+                SizedBox(height: 72.h),
+                CustomButton(
+                  title: "ارسال الكود",
+                  onTap: () {
+                    Go.to(const SmsCodeScreen());
+                  },
+                ),
+                SizedBox(height: 47.h),
+              ],
+            ),
           ),
         ),
       ),

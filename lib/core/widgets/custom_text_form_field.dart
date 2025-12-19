@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:nara/core/theming/color_manager.dart';
 
-class CustomTextFormField extends StatelessWidget {
+import '../helpers/app_assets.dart';
+
+class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     super.key,
     required this.textHint,
-    this.icon,
+    this.prefixIcon,
     this.headerTitle,
     this.suffixIcon,
     this.hintColor,
@@ -15,10 +18,15 @@ class CustomTextFormField extends StatelessWidget {
     this.onTap,
     this.onChanged,
     this.enabled = true,
+    this.isPassword = false,
+    this.controller,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.text,
+    this.validator,
   });
 
   final String textHint;
-  final Widget? icon;
+  final Widget? prefixIcon;
   final String? headerTitle;
   final Icon? suffixIcon;
   final Color? hintColor;
@@ -27,15 +35,27 @@ class CustomTextFormField extends StatelessWidget {
   final VoidCallback? onTap;
   final Function(String)? onChanged;
   final bool enabled;
+  final bool isPassword;
+  final TextEditingController? controller;
+  final bool obscureText;
+  final TextInputType keyboardType;
+  final String? Function(String?)? validator;
+
+  @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (headerTitle != null) ...[
+        if (widget.headerTitle != null) ...[
           Text(
-            headerTitle!,
+            widget.headerTitle!,
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
@@ -45,27 +65,43 @@ class CustomTextFormField extends StatelessWidget {
           SizedBox(height: 10.h),
         ],
         TextFormField(
-          enabled: enabled,
+          controller: widget.controller,
+          obscureText: widget.isPassword ? _isObscure : false,
+          keyboardType: widget.keyboardType,
+          validator: widget.validator,
+          enabled: widget.enabled,
           onTapOutside: (event) =>
               FocusManager.instance.primaryFocus?.unfocus(),
-          onTap: onTap,
-          onChanged: onChanged,
+          onTap: widget.onTap,
+          onChanged: widget.onChanged,
           cursorColor: ColorManager.primaryColor,
-          readOnly: readOnly,
-          autovalidateMode: AutovalidateMode.always,
+          readOnly: widget.readOnly,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
-            hintText: textHint,
+            hintText: widget.textHint,
             contentPadding:
-                contentPadding ??
+                widget.contentPadding ??
                 EdgeInsets.symmetric(vertical: 17.h, horizontal: 20.w),
             hintStyle: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w500,
-              color: hintColor ?? ColorManager.primaryColor,
+              color: widget.hintColor ?? ColorManager.primaryColor,
             ),
-            prefixIcon: icon,
-            // prefixIconColor: MyColors.myGray4,
-            suffixIcon: suffixIcon,
+            prefixIcon:
+                widget.prefixIcon ?? Image.asset(AppAssets.imagesTextfeildIcon),
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    icon: Icon(
+                      _isObscure ? Icons.visibility_off : Icons.visibility,
+                      color: ColorManager.primaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  )
+                : null,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: ColorManager.primaryColor),
@@ -73,6 +109,16 @@ class CustomTextFormField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: ColorManager.primaryColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(
+                color: Colors.red,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: Colors.red, width: 2),
             ),
           ),
         ),
