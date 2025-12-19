@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/features/onboarding/onboarding_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
-
 import 'core/navigation/app_navigation_observer.dart';
 
 void main() {

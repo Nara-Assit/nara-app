@@ -1,73 +1,33 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nara/core/components/custom_build_messages.dart';
 import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/theming/color_manager.dart';
-import 'package:nara/features/home/presentation/widgets/chat_text_form_field.dart';
-import 'package:record/record.dart';
+import 'package:nara/features/home/presentation/widgets/custom_chat_widget.dart';
+import '../../../../core/components/build_voice_message.dart';
 import '../../../../core/components/custom_app_bar.dart';
-import 'package:path_provider/path_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _controller = TextEditingController();
-  bool isTyping = false;
-  final recorder = AudioRecorder();
-  bool isRecording = false;
-  Timer? timer;
-  int seconds = 0;
+  List<MessageModel> messages = [];
   void sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        //code logic
-      });
-    }
-    _controller.clear();
-    isTyping = false;
-  }
-
-  void startRecording() async {
-    final bool hasPermission = await recorder.hasPermission();
-    if (!hasPermission) return;
-
-    final dir = await getTemporaryDirectory();
-    final filePath =
-        '${dir.path}/voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
-    await recorder.start(const RecordConfig(), path: filePath);
-
     setState(() {
-      isRecording = true;
-      seconds = 0;
-    });
-
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      setState(() {
-        seconds++;
-      });
+      messages.add(
+        MessageModel(type: MessageType.text, content: _controller.text.trim()),
+      );
     });
   }
 
-  void stopRecording({bool send = false}) async {
-    timer?.cancel();
-    final path = await recorder.stop();
+  void sendVoice(String path) {
     setState(() {
-      isRecording = false;
-      seconds = 0;
+      messages.add(MessageModel(type: MessageType.voice, content: path));
     });
-    if (send && path != null) {
-      log('Send voice file: $path');
-      setState(() {});
-    } else {
-      log("Recording cancelled");
-    }
   }
 
   @override
@@ -86,90 +46,53 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(),
-          Center(child: Image.asset(AppAssets.mainAvatar)),
-          const Spacer(),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  height: 45.h,
-                  width: 45.w,
-                  margin: EdgeInsets.only(right: 24.w),
-                  child: isTyping
-                      ? Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.r),
-                            color: ColorManager.primaryColor,
-                          ),
-                          child: IconButton(
-                            onPressed: sendMessage,
-                            icon: Icon(
-                              Icons.send,
-                              color: ColorManager.whiteColors,
-                              size: 24.r,
-                            ),
-                          ),
-                        )
-                      : isRecording
-                      ? Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.r),
-                            color: ColorManager.primaryColor,
-                          ),
-                          child: IconButton(
-                            onPressed: stopRecording,
-                            icon: Icon(
-                              Icons.stop,
-                              color: ColorManager.whiteColors,
-                              size: 24.r,
-                            ),
-                          ),
-                        )
-                      : GestureDetector(
-                          onTap: startRecording,
-                          child: Image.asset(
-                            AppAssets.voice,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+          if (messages.isEmpty) ...[
+            const Spacer(),
+            Center(
+              child: Image.asset(AppAssets.mainAvatar),
+            ),
+          ],
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 24.w,
+                vertical: 20.h,
+              ),
+              child: ListView.separated(
+                separatorBuilder: (context, index) => SizedBox(
+                  height: 12.h,
                 ),
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: isTyping
-                    ? const SizedBox.shrink()
-                    : SizedBox(
-                        height: 45.h,
-                        width: 45.w,
-                        child: Image.asset(
-                          AppAssets.camera,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-              ),
-              SizedBox(
-                width: 10.w,
-              ),
-              ChatTextFormField(
-                controller: _controller,
-                isTyping: isTyping,
-                onChanged: (text) {
-                  setState(() {
-                    isTyping = text.isNotEmpty;
-                  });
+
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final msg = messages[index];
+                  if (msg.type == MessageType.text) {
+                    return buildMesaage(msg.content);
+                  } else {
+                    return VoiceMessageBubble(
+                      path: msg.content,
+                    );
+                  }
                 },
               ),
-            ],
+            ),
+          ),
+          CustomChatWidget(
+            sendMessage: sendMessage,
+            controller: _controller,
+            onSendVoice: sendVoice,
           ),
         ],
       ),
     );
   }
+}
+
+enum MessageType { text, voice }
+
+class MessageModel {
+  final MessageType type;
+  final String content;
+
+  MessageModel({required this.type, required this.content});
 }
