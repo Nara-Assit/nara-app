@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/theming/color_manager.dart';
 import 'package:nara/core/theming/text_style_manager.dart';
@@ -8,12 +7,10 @@ import 'package:nara/features/onboarding/models/onboarding_model.dart';
 import 'package:nara/features/onboarding/widgets/on_boarding_item.dart';
 import 'package:nara/features/sign_in_up/sign_in_up_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../core/navigation/navigator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
-
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }

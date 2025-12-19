@@ -5,6 +5,8 @@ import 'package:nara/core/theming/color_manager.dart';
 import 'package:nara/core/theming/text_style_manager.dart';
 import 'package:nara/core/widgets/custom_button.dart';
 import 'package:nara/core/widgets/custom_text_form_field.dart';
+import 'package:nara/features/bottomnavbar/ui/bottom_nav_bar.dart';
+import '../../../core/navigation/navigator.dart';
 
 class SignInWidget extends StatelessWidget {
   const SignInWidget({
@@ -64,6 +66,9 @@ class SignInWidget extends StatelessWidget {
                 image: AppAssets.imagesGoogle,
                 width: 112.w,
                 radius: 25.r,
+                onTap: () {
+                  Go.offAll(const BottomNavBarScreen());
+                },
               ),
               CustomButton(
                 color: ColorManager.primaryColor,

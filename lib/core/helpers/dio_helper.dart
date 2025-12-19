@@ -10,7 +10,10 @@ class DioHelper {
       receiveDataWhenStatusError: true,
       connectTimeout: const Duration(seconds: 20),
       receiveTimeout: const Duration(seconds: 20),
-      headers: {"Accept": "application/json"},
+      headers: {
+        "Accept": "application/json",
+        'Authorization': "Bearer $savedToken",
+      },
     );
     dio = Dio(baseOptions);
   }
@@ -18,7 +21,6 @@ class DioHelper {
     required String url,
     Map<String, dynamic>? query,
   }) async {
-    dio.options.headers = {'Authorization': "Bearer $savedToken"};
     return await dio.get(url, queryParameters: query);
   }
 
@@ -28,7 +30,6 @@ class DioHelper {
     Map<String, dynamic>? data,
     String? token,
   }) async {
-    dio.options.headers = {'Authorization': "Bearer $savedToken"};
     return await dio.post(url, queryParameters: query, data: data);
   }
 
@@ -38,7 +39,6 @@ class DioHelper {
     Map<String, dynamic>? data,
     String? token,
   }) async {
-    dio.options.headers = {'Authorization': "Bearer $savedToken"};
     return await dio.put(url, queryParameters: query, data: data);
   }
 
@@ -47,7 +47,6 @@ class DioHelper {
     Map<String, dynamic>? query,
     String? token,
   }) async {
-    dio.options.headers = {'Authorization': "Bearer $savedToken"};
     return await dio.delete(url, queryParameters: query);
   }
 }

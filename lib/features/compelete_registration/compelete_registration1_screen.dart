@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/navigation/navigator.dart';
-import 'package:nara/core/navigation/transition/implementation/slide/Option/slide_animation_option.dart';
 import 'package:nara/core/widgets/custom_text_form_field.dart';
 import 'package:nara/features/compelete_registration/widgets/complete_registration1_app_bar.dart';
 import 'package:nara/features/verify/verify_screen.dart';
@@ -41,7 +40,7 @@ class CompeleteRegistration1Screen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Go.to(const VerifyScreen(), transition: .slide,options: SlideAnimationOptions());
+                Go.to(const VerifyScreen());
               },
               child: Image.asset(AppAssets.imagesCompeleteIcon),
             ),

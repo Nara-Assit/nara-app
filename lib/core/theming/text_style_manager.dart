@@ -87,6 +87,11 @@ class TextStyleManager {
     fontWeight: FontWeight.bold,
     color: ColorManager.secondColor,
   );
+  static TextStyle font12RegularWhite = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: ColorManager.whiteColors,
+  );
   static TextStyle font14BoldWhite = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.bold,
@@ -118,5 +123,10 @@ class TextStyleManager {
     fontSize: 20.sp,
     fontWeight: FontWeight.bold,
     color: ColorManager.primaryColor,
+  );
+  static TextStyle font14RegularYellowColor = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: ColorManager.yellowColor,
   );
 }

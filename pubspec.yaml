@@ -46,9 +46,14 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_native_splash: ^2.4.7
   smooth_page_indicator: ^1.2.1
+
   pinput: ^6.0.1
   google_fonts: ^6.3.3
   flutter_launcher_icons: ^0.14.4
+  record: ^6.1.2
+  path_provider: ^2.1.5
+  audio_waveforms: ^2.0.1
+
 
 dev_dependencies:
   flutter_test:
