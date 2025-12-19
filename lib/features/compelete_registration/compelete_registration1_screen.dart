@@ -15,36 +15,64 @@ class CompeleteRegistration1Screen extends StatelessWidget {
       appBar: const CompleteRegistration1AppBar(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 25.0.w),
-        child: Column(
-          crossAxisAlignment: .start,
-          spacing: 25.h,
-          children: [
-            SizedBox(height: 10.h),
-            CustomTextFormField(
-              textHint: "ادخل اعمرك",
-              icon: Image.asset(AppAssets.imagesTextfeildIcon),
-              headerTitle: "العمر",
-            ),
-            CustomTextFormField(
-              textHint: "ادخل بلدك",
-              icon: Image.asset(AppAssets.imagesTextfeildIcon),
-              headerTitle: "البلد",
-            ),
-            CustomTextFormField(
-              textHint: "ادخل الرقم",
-              icon: Image.asset(AppAssets.imagesTextfeildIcon),
-              headerTitle: "رقم شخص قريب منك",
-            ),
-            SizedBox(
-              height: 115.h,
-            ),
-            GestureDetector(
-              onTap: () {
-                Go.to(const VerifyScreen());
-              },
-              child: Image.asset(AppAssets.imagesCompeleteIcon),
-            ),
-          ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: .start,
+            spacing: 25.h,
+            children: [
+              SizedBox(height: 10.h),
+              CustomTextFormField(
+                textHint: "ادخل اعمرك",
+                headerTitle: "العمر",
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال العمر';
+                  }
+                  final age = int.tryParse(value);
+                  if (age == null || age <= 0) {
+                    return 'الرجاء ادخال عمر صحيح';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextFormField(
+                textHint: "ادخل بلدك",
+                headerTitle: "البلد",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال البلد';
+                  }
+                  return null;
+                },
+              ),
+              CustomTextFormField(
+                textHint: "ادخل الرقم",
+                headerTitle: "رقم شخص قريب منك",
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'الرجاء ادخال رقم الهاتف';
+                  }
+                  final phoneRegExp = RegExp(r'^\+?[0-9]{7,15}$');
+                  if (!phoneRegExp.hasMatch(value)) {
+                    return 'الرجاء ادخال رقم هاتف صحيح';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 115.h,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Go.to(const VerifyScreen());
+                },
+                child: Image.asset(AppAssets.imagesCompeleteIcon),
+              ),
+            ],
+          ),
         ),
       ),
     );

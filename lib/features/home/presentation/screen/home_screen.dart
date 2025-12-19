@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: ColorManager.whiteColors,
       appBar: const CustomAppBar(
-        pathAsset: AppAssets.communityIcon,
+        pathAsset: AppAssets.imagesCommunityIcon,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (messages.isEmpty) ...[
             const Spacer(),
             Center(
-              child: Image.asset(AppAssets.mainAvatar),
+              child: Image.asset(AppAssets.imagesMain),
             ),
           ],
           Expanded(

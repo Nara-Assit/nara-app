@@ -91,7 +91,7 @@ class BottomNavBarScreen extends StatelessWidget {
                   child: SizedBox(
                     height: 56.h,
                     width: 56.h,
-                    child: Image.asset(AppAssets.emergency),
+                    child: Image.asset(AppAssets.imagesEmergancy),
                   ),
                 ),
               ],

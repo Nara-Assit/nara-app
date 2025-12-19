@@ -18,7 +18,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: 48.h,
           width: 48.w,
           child: Image.asset(
-            pathAsset ?? AppAssets.arrowBack,
+            pathAsset ?? AppAssets.imagesArrowBack,
             fit: BoxFit.cover,
           ),
         ),

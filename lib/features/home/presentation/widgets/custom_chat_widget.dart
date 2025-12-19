@@ -125,7 +125,7 @@ class _CustomChatWidgetState extends State<CustomChatWidget> {
                 : GestureDetector(
                     onTap: startRecording,
                     child: Image.asset(
-                      AppAssets.voice,
+                      AppAssets.imagesVoice,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -142,7 +142,7 @@ class _CustomChatWidgetState extends State<CustomChatWidget> {
                   height: 45.h,
                   width: 45.w,
                   child: Image.asset(
-                    AppAssets.camera,
+                    AppAssets.imagesCamera,
                     fit: BoxFit.cover,
                   ),
                 ),

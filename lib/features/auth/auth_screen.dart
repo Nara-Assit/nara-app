@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/theming/color_manager.dart';
-import 'package:nara/features/auth/widgets/sign_in_widget.dart';
-import 'package:nara/features/auth/widgets/sign_up_widget.dart';
+import 'package:nara/features/auth/widgets/login_widget.dart';
+import 'package:nara/features/auth/widgets/register_widget.dart';
 
 class AuthScreen extends StatelessWidget {
   final int index;
@@ -38,10 +38,10 @@ class AuthScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 30.h),
-              const Expanded(
+              Expanded(
                 child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [SignInWidget(), SignupWidget()],
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [LoginWidget(), RegisterWidget()],
                 ),
               ),
             ],
