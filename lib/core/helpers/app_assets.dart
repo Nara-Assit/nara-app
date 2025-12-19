@@ -20,19 +20,27 @@ class AppAssets {
 
   static const String fontsAlexandriaThin = "assets/fonts/Alexandria-Thin.ttf";
 
-  static const String imagesAndroid12Splash = "assets/images/android_12_splash.png";
-
-  static const String imagesAndroid12SplashLogo = "assets/images/android_12_splash_logo.png";
+  static const String imagesArrowBack = "assets/images/arrow_back.png";
 
   static const String imagesBackArrow = "assets/images/back_arrow.png";
+
+  static const String imagesCamera = "assets/images/camera.png";
+
+  static const String imagesCommunityIcon = "assets/images/community_icon.png";
 
   static const String imagesCompeleteAvatar = "assets/images/compelete_avatar.png";
 
   static const String imagesCompeleteIcon = "assets/images/compelete_icon.png";
 
+  static const String imagesEmergancy = "assets/images/emergancy.png";
+
   static const String imagesFacebook = "assets/images/facebook.png";
 
   static const String imagesGoogle = "assets/images/google.png";
+
+  static const String imagesIcon = "assets/images/icon.png";
+
+  static const String imagesMain = "assets/images/Main.png";
 
   static const String imagesNara = "assets/images/Nara.png";
 
@@ -52,6 +60,8 @@ class AppAssets {
 
   static const String imagesSmsCodeAvatar = "assets/images/sms_code_avatar.png";
 
+  static const String imagesSplash = "assets/images/splash.png";
+
   static const String imagesSplashLogo = "assets/images/splash_logo.png";
 
   static const String imagesSurprise = "assets/images/Surprise.png";
@@ -61,5 +71,7 @@ class AppAssets {
   static const String imagesUserphoto = "assets/images/userphoto.png";
 
   static const String imagesVerifyAvatar = "assets/images/verify_avatar.png";
+
+  static const String imagesVoice = "assets/images/voice.png";
 }
 

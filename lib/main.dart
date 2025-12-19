@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nara/core/navigation/navigator.dart';
-import 'package:nara/features/onboarding/onboarding_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
-
 import 'core/navigation/app_navigation_observer.dart';
-import 'core/theming/theme_manager.dart';
 
 void main() {
   runApp(const NaraApp());
@@ -14,7 +11,6 @@ void main() {
 
 class NaraApp extends StatelessWidget {
   const NaraApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -30,8 +26,13 @@ class NaraApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          title: 'Flutter Demo',
-          theme: ThemeManager().lightTheme,
+          title: 'Nara App',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            fontFamily: 'Alexandria',
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          ),
+
           navigatorObservers: [AppNavigationObserver()],
           home: const SplashScreen(),
         );
