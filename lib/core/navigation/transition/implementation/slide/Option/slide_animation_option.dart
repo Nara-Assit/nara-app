@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
-
-import '../../../../Constants/imports_constants.dart';
-import '../../../../Helper/Interfaces/helper_imports.dart';
+import '../../../../constants/imports_constants.dart';
+import '../../../../helper/Interfaces/helper_imports.dart';
 
 class SlideAnimationOptions extends AnimationOption {
   final SlideDirection? direction;
@@ -20,6 +19,6 @@ class SlideAnimationOptions extends AnimationOption {
   });
 
   /// You must provide either a [direction] or a [customTween]
-// :assert((direction == null && customTween != null) || (direction != null && customTween == null),
-//           'You must provide either a [direction] or a [customTween]');
+  // :assert((direction == null && customTween != null) || (direction != null && customTween == null),
+  //           'You must provide either a [direction] or a [customTween]');
 }

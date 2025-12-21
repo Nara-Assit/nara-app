@@ -4,29 +4,46 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nara/core/helpers/app_constatnts.dart';
+import 'package:nara/core/helpers/storage_constants.dart';
 import 'package:nara/core/networking/base_model.dart';
 import 'package:nara/core/helpers/toast_messages.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import '../networking/api_error_handler.dart';
 
-String? savedToken;
+import '../networking/api_endpoints.dart';
+import 'sharedpref_helper.dart';
 
 class DioHelper {
   late final Dio dio;
 
   DioHelper() {
-    final baseOptions = BaseOptions(
-      baseUrl: AppConstants.baseUrl,
+    final BaseOptions baseOptions = BaseOptions(
+      baseUrl: ApiEndpoints.baseUrl,
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {
         'Accept': 'application/json',
         "Accept-Language": 'ar',
       },
     );
     dio = Dio(baseOptions);
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await SharedprefHelper.getSecurityString(
+            StorageConstants.savedToken,
+          );
+
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+
+          return handler.next(options);
+        },
+      ),
+    );
 
     if (kDebugMode) {
       dio.interceptors.add(
@@ -40,15 +57,6 @@ class DioHelper {
     }
   }
 
-  void _applyAuthHeader([String? token]) {
-    final t = token ?? savedToken;
-    if (t != null && t.isNotEmpty) {
-      dio.options.headers['Authorization'] = 'Bearer $t';
-    } else {
-      dio.options.headers.remove('Authorization');
-    }
-  }
-
   /// Generic GET
   Future<BaseModel<T>> getData<T>({
     required String url,
@@ -57,7 +65,6 @@ class DioHelper {
     Options? options,
     T Function(dynamic json)? mapper,
   }) async {
-    _applyAuthHeader(token);
     try {
       final response = await dio.get(
         url,
@@ -84,7 +91,6 @@ class DioHelper {
     T Function(dynamic json)? mapper,
     final bool isFormData = false,
   }) async {
-    _applyAuthHeader();
     try {
       final response = await dio.post(
         url,
@@ -114,7 +120,6 @@ class DioHelper {
     Options? options,
     T Function(dynamic json)? mapper,
   }) async {
-    _applyAuthHeader(token);
     try {
       dynamic payload = data;
       if (data is FormData) {
@@ -150,7 +155,6 @@ class DioHelper {
     Options? options,
     T Function(dynamic json)? mapper,
   }) async {
-    _applyAuthHeader(token);
     try {
       dynamic payload = data;
       if (data is FormData) {
@@ -184,7 +188,6 @@ class DioHelper {
     Options? options,
     T Function(dynamic json)? mapper,
   }) async {
-    _applyAuthHeader(token);
     try {
       final response = await dio.delete(
         url,

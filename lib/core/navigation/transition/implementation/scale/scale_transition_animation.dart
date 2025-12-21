@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../constants/imports_constants.dart';
-import '../../Factory/transition_creator.dart';
+import '../../factory/transition_creator.dart';
 import 'Animator/scale_animator.dart';
 import 'Options/scale_animation_option.dart';
 

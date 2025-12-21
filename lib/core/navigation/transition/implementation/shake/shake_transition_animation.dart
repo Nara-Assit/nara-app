@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../Factory/transition_creator.dart';
+import '../../factory/transition_creator.dart';
 import 'Options/shake_animation_options.dart';
 
 class ShakeTransitionAnimation implements TransitionCreator {

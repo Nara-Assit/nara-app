@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../Constants/imports_constants.dart';
-import '../../../../Helper/Interfaces/helper_imports.dart';
+import '../../../../constants/imports_constants.dart';
+import '../../../../helper/Interfaces/helper_imports.dart';
 import '../Option/fade_animation_option.dart';
 
 class FadeAnimator extends Animator<double>

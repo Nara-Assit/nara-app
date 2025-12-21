@@ -9,7 +9,6 @@ import 'package:nara/features/auth/auth_screen.dart';
 
 class SignInUpScreen extends StatelessWidget {
   const SignInUpScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
