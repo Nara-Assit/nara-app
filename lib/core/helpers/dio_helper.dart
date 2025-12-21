@@ -1,15 +1,17 @@
 import 'package:dio/dio.dart';
 
+import '../networking/api_endpoints.dart';
+
 String? savedToken;
 
 class DioHelper {
   late Dio dio;
   DioHelper() {
     final BaseOptions baseOptions = BaseOptions(
-      //    baseUrl: ApiEndpoints.baseUrl,
+      baseUrl: ApiEndpoints.baseUrl,
       receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 20),
-      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
       headers: {
         "Accept": "application/json",
         'Authorization': "Bearer $savedToken",

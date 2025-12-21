@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../../constants/imports_constants.dart';
-import '../../Factory/transition_creator.dart';
+import '../../factory/transition_creator.dart';
 import 'Animator/rotation_animator.dart';
 import 'Option/rotation_animation_option.dart';
 

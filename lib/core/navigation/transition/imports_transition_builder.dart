@@ -1,6 +1,6 @@
-import '../Constants/imports_constants.dart';
-import '../Helper/Interfaces/helper_imports.dart';
-import 'Factory/transition_creator.dart';
+import '../constants/imports_constants.dart';
+import '../helper/Interfaces/helper_imports.dart';
+import 'factory/transition_creator.dart';
 import 'implementation/cupertino/Options/cupertino_animation_option.dart';
 import 'implementation/cupertino/cupertino_transition_animation.dart';
 import 'implementation/fade/Option/fade_animation_option.dart';

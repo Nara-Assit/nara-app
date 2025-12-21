@@ -4,7 +4,6 @@ import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/features/onboarding/onboarding_screen.dart';
 
-import '../signin/signin_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

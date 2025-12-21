@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nara/core/navigation/navigator.dart';
-import 'package:nara/features/onboarding/onboarding_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
+import 'core/get_it.dart' as di;
 import 'core/navigation/app_navigation_observer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(const NaraApp());
 }
 

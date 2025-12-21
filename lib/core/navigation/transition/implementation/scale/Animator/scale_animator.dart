@@ -1,7 +1,6 @@
 import 'package:flutter/animation.dart';
-
-import '../../../../Constants/imports_constants.dart';
-import '../../../../Helper/Interfaces/helper_imports.dart';
+import '../../../../constants/imports_constants.dart';
+import '../../../../helper/Interfaces/helper_imports.dart';
 import '../Options/scale_animation_option.dart';
 
 class ScaleAnimator extends Animator<double>
