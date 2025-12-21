@@ -114,8 +114,10 @@ class ApiErrorHandler {
 
   static String _translateMessage(String message) {
     final lower = message.toLowerCase();
-
-    if (lower.contains("invalid") || lower.contains("wrong")) {
+    log("message $lower");
+    if (lower.contains("expired otp")) {
+      return "كود التحقق غير صالح يرجي اعادة الارسال";
+    } else if (lower.contains("invalid") || lower.contains("wrong")) {
       return "البيانات غير صحيحة. يرجى التحقق من المدخلات.";
     } else if (lower.contains("unauthorized") ||
         lower.contains("forbidden") ||

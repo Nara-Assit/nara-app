@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/helpers/validators.dart';
 import 'package:nara/core/navigation/navigator.dart';
-import 'package:nara/features/sms_code/sms_code_screen.dart';
+import 'package:nara/features/otp/otp_screen.dart';
 import '../../core/helpers/app_assets.dart';
 import '../../core/theming/text_style_manager.dart';
 import '../../core/widgets/custom_button.dart';
@@ -41,7 +41,7 @@ class VerifyViaEmailScreen extends StatelessWidget {
                 CustomButton(
                   title: "ارسال الكود",
                   onTap: () {
-                    Go.to(const SmsCodeScreen());
+                    Go.to(const OtpScreen());
                   },
                 ),
                 SizedBox(height: 47.h),

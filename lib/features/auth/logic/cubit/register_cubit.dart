@@ -1,17 +1,18 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nara/features/auth/data/models/register_request_model.dart';
 import 'package:nara/features/auth/data/repos/register_repo.dart';
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   RegisterCubit() : super(RegisterInitial());
 
-  Future<void> register(String email, String password) async {
+  Future<void> register(RegisterRequestModel registerRequestModel) async {
     emit(RegisterLoading());
     try {
       final RegisterRepository registerRepository = RegisterRepository();
-      final result = await registerRepository.register(email, password);
+      final result = await registerRepository.register(registerRequestModel);
       // On success
       log('Register successful: $result');
       emit(RegisterSuccess());

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nara/core/navigation/navigator.dart';
+import 'package:nara/features/sign_in_up/sign_in_up_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
 import 'core/navigation/app_navigation_observer.dart';
 
@@ -34,7 +35,7 @@ class NaraApp extends StatelessWidget {
           ),
 
           navigatorObservers: [AppNavigationObserver()],
-          home: const SplashScreen(),
+          home: const SignInUpScreen(),
         );
       },
     );

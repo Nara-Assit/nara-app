@@ -68,6 +68,9 @@ class DioHelper {
       return BaseModel.fromJson(response.data, (json) => json as T);
     } catch (error, stackTrace) {
       final apiError = ApiErrorHandler.handle(error, stackTrace);
+      if (error is DioException) {
+        ToastMessages.showSimpleToast(msg: apiError.message, type: .error);
+      }
       throw apiError;
     }
   }
@@ -131,6 +134,45 @@ class DioHelper {
       return BaseModel.fromJson(response.data, (json) => json as T);
     } catch (error, stackTrace) {
       final apiError = ApiErrorHandler.handle(error, stackTrace);
+      if (error is DioException) {
+        ToastMessages.showSimpleToast(msg: apiError.message, type: .error);
+      }
+      throw apiError;
+    }
+  }
+
+  /// Generic PUT
+  Future<BaseModel<T>> patchData<T>({
+    required String url,
+    Map<String, dynamic>? query,
+    dynamic data,
+    String? token,
+    Options? options,
+    T Function(dynamic json)? mapper,
+  }) async {
+    _applyAuthHeader(token);
+    try {
+      dynamic payload = data;
+      if (data is FormData) {
+        payload = data;
+      } else if (data is Map<String, dynamic> && data['isFormData'] == true) {
+        payload = await _mapToFormData(data);
+      }
+
+      final response = await dio.patch(
+        url,
+        queryParameters: query,
+        data: payload,
+        options: options,
+      );
+
+      if (mapper != null) return BaseModel.fromJson(response.data, mapper);
+      return BaseModel.fromJson(response.data, (json) => json as T);
+    } catch (error, stackTrace) {
+      final apiError = ApiErrorHandler.handle(error, stackTrace);
+      if (error is DioException) {
+        ToastMessages.showSimpleToast(msg: apiError.message, type: .error);
+      }
       throw apiError;
     }
   }
@@ -153,6 +195,9 @@ class DioHelper {
       return BaseModel.fromJson(response.data, (json) => json as T);
     } catch (error, stackTrace) {
       final apiError = ApiErrorHandler.handle(error, stackTrace);
+      if (error is DioException) {
+        ToastMessages.showSimpleToast(msg: apiError.message, type: .error);
+      }
       throw apiError;
     }
   }
