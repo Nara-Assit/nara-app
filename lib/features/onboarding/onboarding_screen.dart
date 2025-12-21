@@ -7,6 +7,8 @@ import 'package:nara/features/onboarding/models/onboarding_model.dart';
 import 'package:nara/features/onboarding/widgets/on_boarding_item.dart';
 import 'package:nara/features/sign_in_up/sign_in_up_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../core/helpers/sharedpref_helper.dart';
+import '../../core/helpers/storage_constants.dart';
 import '../../core/navigation/navigator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -50,6 +52,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               children: [
                 GestureDetector(
                   onTap: () {
+                    SharedprefHelper.setBoolData(
+                      StorageConstants.onBoarding,
+                      true,
+                    );
                     Go.offAll(const SignInUpScreen());
                   },
                   child: Text(
@@ -61,6 +67,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   onTap: () {
                     if (_controller.page ==
                         OnboardingModel.onboardingPages.length - 1) {
+                      SharedprefHelper.setBoolData(
+                        StorageConstants.onBoarding,
+                        true,
+                      );
                       Go.offAll(const SignInUpScreen());
                       return;
                     }

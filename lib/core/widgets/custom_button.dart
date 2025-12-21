@@ -15,6 +15,7 @@ class CustomButton extends StatelessWidget {
     this.image,
     this.radius,
     this.onTap,
+    this.isLoading = false,
   });
 
   final Color color;
@@ -24,13 +25,14 @@ class CustomButton extends StatelessWidget {
   final double? hight;
   final String? image;
   final double? radius;
+  final bool isLoading;
 
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: isLoading ? null : onTap,
       child: Container(
         alignment: Alignment.center,
         height: hight ?? 55.h,
@@ -39,21 +41,30 @@ class CustomButton extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(radius ?? 16.r),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (image != null) ...[
-              Image.asset(image!, fit: BoxFit.cover, height: 24.h, width: 24.w),
-              SizedBox(width: 10.w),
-            ],
-            Text(
-              title,
-              style: TextStyleManager.font16MediumBlack.copyWith(
-                color: textColor,
+        child: isLoading
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (image != null) ...[
+                    Image.asset(
+                      image!,
+                      fit: BoxFit.cover,
+                      height: 24.h,
+                      width: 24.w,
+                    ),
+                    SizedBox(width: 10.w),
+                  ],
+                  Text(
+                    title,
+                    style: TextStyleManager.font16MediumBlack.copyWith(
+                      color: textColor,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

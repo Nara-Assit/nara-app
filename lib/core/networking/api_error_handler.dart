@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:nara/core/helpers/sharedpref_helper.dart';
+import 'package:nara/core/navigation/navigator.dart';
+import 'package:nara/features/auth/auth_screen.dart';
 import 'api_error_model.dart';
 
 class ApiErrorHandler {
@@ -47,6 +50,16 @@ class ApiErrorHandler {
           final response = dioError.response;
           if (response != null) {
             final statusCode = response.statusCode ?? 500;
+
+            // 🔴 HANDLE UNAUTHORIZED HERE
+            if (statusCode == 401 || statusCode == 403) {
+              SharedprefHelper.clearAllSecuredData();
+              Go.offAll(const AuthScreen());
+              return ApiErrorModel(
+                message: "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.",
+                statusCode: statusCode,
+              );
+            }
 
             String message = "حدث خطأ غير متوقع من الخادم.";
             // Handle typical validation error structure: { errors: [{ field, message }, ...] }
@@ -114,8 +127,10 @@ class ApiErrorHandler {
 
   static String _translateMessage(String message) {
     final lower = message.toLowerCase();
-
-    if (lower.contains("invalid") || lower.contains("wrong")) {
+    log("message $lower");
+    if (lower.contains("expired otp")) {
+      return "كود التحقق غير صالح يرجي اعادة الارسال";
+    } else if (lower.contains("invalid") || lower.contains("wrong")) {
       return "البيانات غير صحيحة. يرجى التحقق من المدخلات.";
     } else if (lower.contains("unauthorized") ||
         lower.contains("forbidden") ||

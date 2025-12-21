@@ -55,6 +55,7 @@ dependencies:
   record: ^6.1.2
   path_provider: ^2.1.5
   audio_waveforms: ^2.0.1
+  get_it: ^9.2.0
 
 
 dev_dependencies:

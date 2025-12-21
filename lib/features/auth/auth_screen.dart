@@ -41,7 +41,7 @@ class AuthScreen extends StatelessWidget {
               Expanded(
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
-                  children: [LoginWidget(), RegisterWidget()],
+                  children: [const LoginWidget(), RegisterWidget()],
                 ),
               ),
             ],

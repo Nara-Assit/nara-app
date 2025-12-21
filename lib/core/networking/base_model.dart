@@ -1,8 +1,8 @@
 class BaseModel<T> {
   final T? data;
-  final String? message;
-  final bool? success;
-  BaseModel({this.data, this.message, this.success});
+  final String message;
+  final bool success;
+  BaseModel({this.data, required this.message, required this.success});
 
   factory BaseModel.fromJson(
     Map<String, dynamic> json,
@@ -10,8 +10,8 @@ class BaseModel<T> {
   ) {
     return BaseModel<T>(
       data: json['data'] != null ? fromJsonT(json['data']) : null,
-      message: json['message'],
-      success: json['success'],
+      message: json['message'] ?? "",
+      success: json['success'] ?? false,
     );
   }
 

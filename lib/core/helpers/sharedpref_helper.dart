@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:nara/core/helpers/storage_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedprefHelper {
@@ -42,6 +43,6 @@ class SharedprefHelper {
   static Future<void> clearAllSecuredData() async {
     debugPrint('FlutterSecureStorage : all data has been cleared');
     const flutterSecureStorage = FlutterSecureStorage();
-    await flutterSecureStorage.delete(key: "savedToken");
+    await flutterSecureStorage.delete(key: StorageConstants.savedToken);
   }
 }

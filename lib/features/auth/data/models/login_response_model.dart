@@ -1,12 +1,12 @@
 import 'package:nara/core/models/user_model.dart';
 
 class LoginResponseModel {
-  final String accessToken;
-  final String refreshToken;
+  final String? accessToken;
+  final String? refreshToken;
   final UserModel user;
   const LoginResponseModel({
-    required this.accessToken,
-    required this.refreshToken,
+    this.accessToken,
+    this.refreshToken,
     required this.user,
   });
 

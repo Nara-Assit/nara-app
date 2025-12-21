@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nara/core/theming/color_manager.dart';
+import 'package:nara/features/otp/logic/cubit/otp_cubit.dart';
 import 'package:pinput/pinput.dart';
 
 class EnterOtpWidget extends StatelessWidget {
@@ -16,7 +18,7 @@ class EnterOtpWidget extends StatelessWidget {
         child: Directionality(
           textDirection: TextDirection.ltr,
           child: Pinput(
-            length: 5,
+            length: 6,
             disabledPinTheme: const PinTheme(
               constraints: BoxConstraints(minWidth: 50),
             ),
@@ -34,7 +36,9 @@ class EnterOtpWidget extends StatelessWidget {
                 ),
               ],
             ),
-            onChanged: (value) {},
+            onChanged: (value) {
+              context.read<OtpCubit>().otp = value;
+            },
             validator: (value) {
               if (value == null || value.isEmpty || value.length < 5) {
                 return 'الرجاء إدخال كود التحقق الصحيح';

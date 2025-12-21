@@ -54,15 +54,20 @@ class _LoginWidgetState extends State<LoginWidget> {
               SizedBox(height: 90.h),
               Builder(
                 builder: (context) {
-                  return CustomButton(
-                    title: "تسجيل الدخول",
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        context.read<LoginCubit>().login(
-                          emailController.text,
-                          passController.text,
-                        );
-                      }
+                  return BlocBuilder<LoginCubit, LoginState>(
+                    builder: (context, state) {
+                      return CustomButton(
+                        title: "تسجيل الدخول",
+                        isLoading: state is LoginLoading,
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            context.read<LoginCubit>().login(
+                              emailController.text,
+                              passController.text,
+                            );
+                          }
+                        },
+                      );
                     },
                   );
                 },
