@@ -18,7 +18,12 @@ class LoginCubit extends Cubit<LoginState> {
       if (result.data!.user.isVerified) {
         Go.to(const BottomNavBarScreen());
       } else {
-        Go.to(OtpScreen(email: email));
+        Go.to(
+          OtpScreen(
+            email: email,
+            isLoginScreen: true,
+          ),
+        );
       }
 
       emit(LoginSuccess());

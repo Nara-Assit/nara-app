@@ -6,13 +6,13 @@ import 'package:nara/features/auth/data/models/register_request_model.dart';
 
 class RegisterRepository {
   Future<BaseModel<UserModel>> register(
-    RegisterRequestModel registerRequestModel
+    RegisterRequestModel registerRequestModel,
   ) async {
     try {
       return await DioHelper().postData(
         url: ApiEndpoints.register,
         body: registerRequestModel.toJson(),
-        mapper: (json) => UserModel.fromJson(json),
+        mapper: (json) => UserModel.fromJson(json['publicUser']),
       );
     } catch (e) {
       throw Exception(e.toString());

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/features/otp/logic/cubit/otp_cubit.dart';
 import 'package:nara/features/otp/widgets/enter_otp_widget.dart';
-import 'package:nara/features/verify/compeleted_screen.dart';
 import '../../core/helpers/app_assets.dart';
 import '../../core/theming/text_style_manager.dart';
 import '../../core/widgets/custom_button.dart';
 
 class OtpScreen extends StatefulWidget {
   final String? email;
-  const OtpScreen({super.key, this.email});
+  final bool isLoginScreen;
+  const OtpScreen({super.key, this.email, this.isLoginScreen = false});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -22,7 +21,13 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OtpCubit(),
+      create: (context) {
+        // if (widget.isLoginScreen) {
+        //   return OtpCubit()..resend(widget.email!);
+        // } else {
+        return OtpCubit();
+        // }
+      },
       child: Scaffold(
         appBar: AppBar(),
         body: Builder(

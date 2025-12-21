@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nara/core/helpers/toast_messages.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/features/bottomnavbar/ui/bottom_nav_bar.dart';
-import 'package:nara/features/home/presentation/screen/home_screen.dart';
 import 'package:nara/features/otp/data/repos/otp_repo.dart';
 
 part 'otp_state.dart';
