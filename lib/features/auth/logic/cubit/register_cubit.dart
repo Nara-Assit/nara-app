@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nara/features/auth/data/models/register_request_model.dart';
 import 'package:nara/features/auth/data/repos/register_repo.dart';
 import '../../../../core/navigation/navigator.dart';
-import '../../../bottomnavbar/ui/bottom_nav_bar.dart';
 import '../../../otp/otp_screen.dart';
 part 'register_state.dart';
 
