@@ -30,12 +30,36 @@ class DioHelper {
           final token = await SharedprefHelper.getSecurityString(
             StorageConstants.savedToken,
           );
-
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-
           return handler.next(options);
+        },
+        onError: (error, handler) async {
+          if (error.response?.statusCode == 401) {
+            try {
+              final token = await SharedprefHelper.getSecurityString(
+                StorageConstants.savedToken,
+              );
+
+              final response = await dio.post(
+                ApiEndpoints.baseUrl + ApiEndpoints.refreshToken,
+                options: Options(
+                  headers: {'Authorization': 'Bearer $token'},
+                ),
+              );
+              final newToken = response.data['token'];
+              await SharedprefHelper.setSecurityString('token', newToken);
+              error.requestOptions.headers['Authorization'] =
+                  'Bearer $newToken';
+              final retryResponse = await dio.fetch(error.requestOptions);
+              return handler.resolve(retryResponse);
+            } catch (e) {
+              return handler.reject(error);
+            }
+          }
+
+          return handler.next(error);
         },
       ),
     );

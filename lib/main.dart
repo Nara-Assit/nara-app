@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:nara/core/navigation/navigator.dart';
 import 'package:nara/core/theming/theme_manager.dart';
-import 'package:nara/features/sign_in_up/sign_in_up_screen.dart';
 import 'package:nara/features/splash/splash_screen.dart';
 import 'core/get_it.dart' as di;
 import 'core/helpers/sharedpref_helper.dart';
