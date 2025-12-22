@@ -1,16 +1,11 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:nara/core/helpers/app_constatnts.dart';
 import 'package:nara/core/helpers/storage_constants.dart';
 import 'package:nara/core/networking/base_model.dart';
 import 'package:nara/core/helpers/toast_messages.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
-
 import '../networking/api_error_handler.dart';
-
 import '../networking/api_endpoints.dart';
 import 'sharedpref_helper.dart';
 
@@ -35,12 +30,36 @@ class DioHelper {
           final token = await SharedprefHelper.getSecurityString(
             StorageConstants.savedToken,
           );
-
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-
           return handler.next(options);
+        },
+        onError: (error, handler) async {
+          if (error.response?.statusCode == 401) {
+            try {
+              final token = await SharedprefHelper.getSecurityString(
+                StorageConstants.savedToken,
+              );
+
+              final response = await dio.post(
+                ApiEndpoints.baseUrl + ApiEndpoints.refreshToken,
+                options: Options(
+                  headers: {'Authorization': 'Bearer $token'},
+                ),
+              );
+              final newToken = response.data['token'];
+              await SharedprefHelper.setSecurityString('token', newToken);
+              error.requestOptions.headers['Authorization'] =
+                  'Bearer $newToken';
+              final retryResponse = await dio.fetch(error.requestOptions);
+              return handler.resolve(retryResponse);
+            } catch (e) {
+              return handler.reject(error);
+            }
+          }
+
+          return handler.next(error);
         },
       ),
     );

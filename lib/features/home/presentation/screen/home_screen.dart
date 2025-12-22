@@ -4,51 +4,65 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/components/custom_build_messages.dart';
 import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/theming/color_manager.dart';
-import 'package:nara/features/home/business%20logic/change_text_voice_cubit.dart';
-import 'package:nara/features/home/business%20logic/change_text_voice_state.dart';
 import 'package:nara/features/home/presentation/widgets/custom_chat_widget.dart';
 import '../../../../core/components/build_voice_message.dart';
 import '../../../../core/components/custom_app_bar.dart';
 import '../../../../core/get_it.dart' as di;
+import '../../../../core/helpers/db_helper.dart';
+import '../../business logic/change_text_voice_cubit.dart';
+import '../../business logic/change_text_voice_state.dart';
+import '../../data/models/message_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<MessageModel> messages = [];
+  List<MessageModel> messages = [];
+  bool isLoading = true;
 
-  void _sendTextMessage(ChangeTextVoiceCubit cubit) {
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  Future<void> _loadMessages() async {
+    final savedMessages = await LocalDatabaseHelper.getAllMessages();
+    setState(() {
+      messages = savedMessages;
+      isLoading = false;
+    });
+  }
+
+  Future<void> sendMessage(ChangeTextVoiceCubit cubit) async {
+    if (_controller.text.trim().isEmpty) return;
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
-
     setState(() {
       messages.add(
         MessageModel(
           type: MessageType.text,
           content: text,
+          sender: 'user',
         ),
       );
     });
-
     _controller.clear();
-
-    // نرسل النص للسيرفر عن طريق cubit
     cubit.changeTextToVoice(text);
   }
 
-  void _addVoiceMessage(String path) {
+  void sendVoice(String path) async {
+    final voiceMessage = MessageModel(
+      type: MessageType.voice,
+      content: path,
+      sender: 'bot',
+    );
+    await LocalDatabaseHelper.insertMessage(voiceMessage);
     setState(() {
-      messages.add(
-        MessageModel(
-          type: MessageType.voice,
-          content: path,
-        ),
-      );
+      messages.add(voiceMessage);
     });
   }
 
@@ -60,13 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ChangeTextVoiceCubit>(
-      create: (_) => di.setUp<ChangeTextVoiceCubit>(),
+    return BlocProvider(
+      create: (context) => di.setUp<ChangeTextVoiceCubit>(),
       child: Builder(
         builder: (context) {
-          // هنا نجيب cubit ونمرره لكل الfunctions
-          final cubit = context.read<ChangeTextVoiceCubit>();
-
           return Scaffold(
             backgroundColor: ColorManager.whiteColors,
             appBar: const CustomAppBar(
@@ -75,11 +86,29 @@ class _HomeScreenState extends State<HomeScreen> {
             body: BlocListener<ChangeTextVoiceCubit, ChangeTextVoiceState>(
               listener: (context, state) {
                 if (state is ChangeTextVoiceStateSuccess) {
-                  _addVoiceMessage(state.changeTextToSpeachModel.publicUrl);
-                }
-
-                if (state is ChangeTextVoiceStateError) {
-                  // ممكن هنا SnackBar أو Toast
+                  setState(() {
+                    messages.add(
+                      MessageModel(
+                        type: MessageType.voice,
+                        content: state.changeTextToSpeachModel.publicUrl,
+                        sender: 'bot',
+                      ),
+                    );
+                  });
+                } else if (state is ChangeTextVoiceStateError) {
+                  setState(() {
+                    final lastMessage = messages.last;
+                    messages.removeLast();
+                    messages.add(
+                      MessageModel(
+                        type: MessageType.text,
+                        content: "",
+                        sender: 'bot',
+                        originalText: lastMessage.originalText,
+                        status: MessageStatus.failure,
+                      ),
+                    );
+                  });
                 }
               },
               child: Column(
@@ -102,9 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         separatorBuilder: (_, _) => SizedBox(height: 12.h),
                         itemBuilder: (context, index) {
                           final msg = messages[index];
-
                           if (msg.type == MessageType.text) {
                             return buildMesaage(msg.content);
+                          } else if (msg.status == MessageStatus.failure) {
+                            return TextButton(
+                              onPressed: () {
+                                sendMessage(
+                                  context.read<ChangeTextVoiceCubit>(),
+                                );
+                              },
+                              child: const Text("retry"),
+                            );
                           } else {
                             return VoiceMessageBubble(path: msg.content);
                           }
@@ -112,12 +149,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-
-                  // تمرير cubit كوسيط بدل context.read
                   CustomChatWidget(
+                    sendMessage: () =>
+                        sendMessage(context.read<ChangeTextVoiceCubit>()),
                     controller: _controller,
-                    sendMessage: () => _sendTextMessage(cubit),
-                    onSendVoice: _addVoiceMessage,
+                    onSendVoice: sendVoice,
                   ),
                 ],
               ),
@@ -127,13 +163,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-enum MessageType { text, voice }
-
-class MessageModel {
-  final MessageType type;
-  final String content;
-
-  MessageModel({required this.type, required this.content});
 }

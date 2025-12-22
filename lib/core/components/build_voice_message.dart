@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +11,6 @@ class VoiceMessageBubble extends StatefulWidget {
     super.key,
     required this.path,
   });
-
   @override
   State<VoiceMessageBubble> createState() => _VoiceMessageBubbleState();
 }
@@ -17,20 +18,55 @@ class VoiceMessageBubble extends StatefulWidget {
 class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
   late final PlayerController _playerController;
   bool isPlaying = false;
+  StreamSubscription<PlayerState>? _playerStateSubscription;
+
   @override
   void initState() {
     super.initState();
     _playerController = PlayerController();
     _playerController.preparePlayer(
       path: widget.path,
-      shouldExtractWaveform: true, // ✅ مرة واحدة
     );
+
+    _playerStateSubscription = _playerController.onPlayerStateChanged.listen((
+      state,
+    ) {
+      if (state == PlayerState.stopped) {
+        setState(() {
+          isPlaying = false;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    _playerStateSubscription?.cancel();
     _playerController.dispose();
     super.dispose();
+  }
+
+  void _togglePlayPause() async {
+    if (isPlaying) {
+      await _playerController.pausePlayer();
+      setState(() {
+        isPlaying = false;
+      });
+    } else {
+      final currentState = _playerController.playerState;
+
+      if (currentState == PlayerState.stopped) {
+        await _playerController.preparePlayer(
+          path: widget.path,
+          shouldExtractWaveform: false,
+        );
+      }
+
+      await _playerController.startPlayer();
+      setState(() {
+        isPlaying = true;
+      });
+    }
   }
 
   @override
@@ -51,14 +87,7 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
                 isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
               ),
-              onPressed: () {
-                isPlaying
-                    ? _playerController.pausePlayer()
-                    : _playerController.startPlayer();
-                setState(() {
-                  isPlaying = !isPlaying;
-                });
-              },
+              onPressed: _togglePlayPause,
             ),
             AudioFileWaveforms(
               size: Size(200.w, 40.h),
