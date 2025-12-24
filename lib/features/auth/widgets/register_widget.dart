@@ -10,7 +10,6 @@ import 'package:nara/core/widgets/custom_text_form_field.dart';
 import 'package:nara/features/auth/logic/cubit/register_cubit.dart';
 import 'package:nara/features/compelete_registration/compelete_registration_screen.dart';
 import 'package:nara/features/bottomnavbar/ui/bottom_nav_bar.dart';
-
 import '../../../core/helpers/validators.dart';
 
 class RegisterWidget extends StatelessWidget {
@@ -74,7 +73,7 @@ class RegisterWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 35.h),
                 CustomButton(
-                  title: "انشاء حساب",
+                  title: " متابعه ",
                   onTap: () {
                     Go.to(
                       CompeleteRegistrationScreen(

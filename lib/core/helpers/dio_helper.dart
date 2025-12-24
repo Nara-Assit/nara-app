@@ -38,18 +38,25 @@ class DioHelper {
         onError: (error, handler) async {
           if (error.response?.statusCode == 401) {
             try {
-              final token = await SharedprefHelper.getSecurityString(
-                StorageConstants.savedToken,
+              final refreshToken = await SharedprefHelper.getSecurityString(
+                StorageConstants.refreshToken,
               );
 
               final response = await dio.post(
                 ApiEndpoints.baseUrl + ApiEndpoints.refreshToken,
-                options: Options(
-                  headers: {'Authorization': 'Bearer $token'},
-                ),
+                data: {"refreshToken": refreshToken},
+                options: Options(),
               );
-              final newToken = response.data['token'];
-              await SharedprefHelper.setSecurityString('token', newToken);
+              final newToken = response.data['accessToken'];
+              final newRefreshToken = response.data['refreshToken'];
+              await SharedprefHelper.setSecurityString(
+                StorageConstants.savedToken,
+                newToken,
+              );
+              await SharedprefHelper.setSecurityString(
+                StorageConstants.refreshToken,
+                newRefreshToken,
+              );
               error.requestOptions.headers['Authorization'] =
                   'Bearer $newToken';
               final retryResponse = await dio.fetch(error.requestOptions);

@@ -22,6 +22,10 @@ class LoginCubit extends Cubit<LoginState> {
           StorageConstants.savedToken,
           result.data!.accessToken!,
         );
+        SharedprefHelper.setSecurityString(
+          StorageConstants.refreshToken,
+          result.data!.refreshToken!,
+        );
         Go.to(const BottomNavBarScreen());
       } else {
         Go.to(
