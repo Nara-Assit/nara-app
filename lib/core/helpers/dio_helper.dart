@@ -45,10 +45,9 @@ class DioHelper {
               final response = await dio.post(
                 ApiEndpoints.baseUrl + ApiEndpoints.refreshToken,
                 data: {"refreshToken": refreshToken},
-                options: Options(),
               );
-              final newToken = response.data['accessToken'];
-              final newRefreshToken = response.data['refreshToken'];
+              final newToken = response.data['data']['accessToken'];
+              final newRefreshToken = response.data['data']['refreshToken'];
               await SharedprefHelper.setSecurityString(
                 StorageConstants.savedToken,
                 newToken,
