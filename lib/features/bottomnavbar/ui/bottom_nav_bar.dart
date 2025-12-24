@@ -25,7 +25,7 @@ class BottomNavBarScreen extends StatelessWidget {
                     bottom: 26.h,
                     left: 24.w,
                     right: 83.w,
-                    top: 60.h,
+                    top: 40.h,
                   ),
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(

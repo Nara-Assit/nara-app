@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -38,21 +39,40 @@ class DioHelper {
         onError: (error, handler) async {
           if (error.response?.statusCode == 401) {
             try {
-              final token = await SharedprefHelper.getSecurityString(
-                StorageConstants.savedToken,
+              final refreshToken = await SharedprefHelper.getSecurityString(
+                StorageConstants.refreshToken,
               );
 
               final response = await dio.post(
-                ApiEndpoints.baseUrl + ApiEndpoints.refreshToken,
-                options: Options(
-                  headers: {'Authorization': 'Bearer $token'},
-                ),
+                ApiEndpoints.refreshToken,
+                data: {"refreshToken": refreshToken},
               );
-              final newToken = response.data['token'];
-              await SharedprefHelper.setSecurityString('token', newToken);
-              error.requestOptions.headers['Authorization'] =
-                  'Bearer $newToken';
-              final retryResponse = await dio.fetch(error.requestOptions);
+              final newToken = response.data['data']['accessToken'];
+              final newRefreshToken = response.data['data']['refreshToken'];
+              await SharedprefHelper.setSecurityString(
+                StorageConstants.savedToken,
+                newToken,
+              );
+              log(newToken);
+              await SharedprefHelper.setSecurityString(
+                StorageConstants.refreshToken,
+                newRefreshToken,
+              );
+              // error.requestOptions.headers['Authorization'] =
+              //     'Bearer $newToken';
+              final opts = Options(
+                method: error.requestOptions.method,
+                headers: {
+                  ...error.requestOptions.headers,
+                  'Authorization': 'Bearer $newToken',
+                },
+              );
+              final retryResponse = await dio.request(
+                error.requestOptions.path,
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
+                options: opts,
+              );
               return handler.resolve(retryResponse);
             } catch (e) {
               return handler.reject(error);

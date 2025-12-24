@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/color_manager.dart';
+import 'audio_manager.dart';
 
 class VoiceMessageBubble extends StatefulWidget {
   final String path;
@@ -15,11 +15,14 @@ class VoiceMessageBubble extends StatefulWidget {
   State<VoiceMessageBubble> createState() => _VoiceMessageBubbleState();
 }
 
-class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
+class _VoiceMessageBubbleState extends State<VoiceMessageBubble>
+    with AutomaticKeepAliveClientMixin {
   late final PlayerController _playerController;
   bool isPlaying = false;
-  StreamSubscription<PlayerState>? _playerStateSubscription;
 
+  StreamSubscription<PlayerState>? _playerStateSubscription;
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
@@ -27,7 +30,6 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
     _playerController.preparePlayer(
       path: widget.path,
     );
-
     _playerStateSubscription = _playerController.onPlayerStateChanged.listen((
       state,
     ) {
@@ -53,6 +55,10 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
         isPlaying = false;
       });
     } else {
+      VoiceMessageManager.playNew(_playerController, widget.path);
+      setState(() {
+        isPlaying = true;
+      });
       final currentState = _playerController.playerState;
 
       if (currentState == PlayerState.stopped) {
@@ -71,6 +77,7 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Align(
       alignment: Alignment.centerRight,
       child: Container(

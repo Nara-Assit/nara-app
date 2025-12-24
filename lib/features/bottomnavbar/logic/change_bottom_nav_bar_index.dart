@@ -8,7 +8,7 @@ import '../../profile/presentation/screen/profile_screen.dart';
 class ChangeBottomNavBarIndex extends Cubit<int> {
   ChangeBottomNavBarIndex() : super(0);
   List<Widget> screens = [
-    const HomeScreen(),
+    HomeScreen(),
     const ProfileScreen(),
     const SessionsScreen(),
     const SourcesScreen(),
