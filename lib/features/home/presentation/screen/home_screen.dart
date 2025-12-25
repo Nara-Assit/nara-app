@@ -13,7 +13,6 @@ import '../../../../core/get_it.dart' as di;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -21,11 +20,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<MessageModel> messages = [];
-
   void _sendTextMessage(ChangeTextVoiceCubit cubit) {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
-
     setState(() {
       messages.add(
         MessageModel(
@@ -34,10 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     });
-
     _controller.clear();
 
-    // نرسل النص للسيرفر عن طريق cubit
     cubit.changeTextToVoice(text);
   }
 
@@ -64,10 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (_) => di.setUp<ChangeTextVoiceCubit>(),
       child: Builder(
         builder: (context) {
-          // هنا نجيب cubit ونمرره لكل الfunctions
           final cubit = context.read<ChangeTextVoiceCubit>();
 
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: ColorManager.whiteColors,
             appBar: const CustomAppBar(
               pathAsset: AppAssets.imagesCommunityIcon,
@@ -113,7 +108,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  // تمرير cubit كوسيط بدل context.read
                   CustomChatWidget(
                     controller: _controller,
                     sendMessage: () => _sendTextMessage(cubit),

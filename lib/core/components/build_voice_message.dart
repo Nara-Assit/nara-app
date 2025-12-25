@@ -18,13 +18,24 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
   late final PlayerController _playerController;
   bool isPlaying = false;
   @override
+  @override
   void initState() {
     super.initState();
     _playerController = PlayerController();
+
     _playerController.preparePlayer(
       path: widget.path,
-      shouldExtractWaveform: true, // ✅ مرة واحدة
+      shouldExtractWaveform: true,
     );
+
+    _playerController.onPlayerStateChanged.listen((state) {
+      if (state == PlayerState.stopped) {
+        _playerController.seekTo(0);
+        setState(() {
+          isPlaying = false;
+        });
+      }
+    });
   }
 
   @override
