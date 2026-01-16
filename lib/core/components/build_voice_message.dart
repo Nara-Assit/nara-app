@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/color_manager.dart';
+import 'voice_manager.dart';
 
 class VoiceMessageBubble extends StatefulWidget {
   final String path;
@@ -15,19 +15,19 @@ class VoiceMessageBubble extends StatefulWidget {
   State<VoiceMessageBubble> createState() => _VoiceMessageBubbleState();
 }
 
-class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
-  late final PlayerController _playerController;
+class _VoiceMessageBubbleState extends State<VoiceMessageBubble>
+    with AutomaticKeepAliveClientMixin {
+  final PlayerController _playerController = PlayerController();
   bool isPlaying = false;
   StreamSubscription<PlayerState>? _playerStateSubscription;
-
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
-    _playerController = PlayerController();
     _playerController.preparePlayer(
       path: widget.path,
     );
-
     _playerStateSubscription = _playerController.onPlayerStateChanged.listen((
       state,
     ) {
@@ -53,16 +53,17 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
         isPlaying = false;
       });
     } else {
-      final currentState = _playerController.playerState;
-
-      if (currentState == PlayerState.stopped) {
-        await _playerController.preparePlayer(
-          path: widget.path,
-          shouldExtractWaveform: false,
-        );
-      }
-
-      await _playerController.startPlayer();
+      await VoiceMessageManager.playNew(
+        _playerController,
+        widget.path,
+        () {
+          if (mounted) {
+            setState(() {
+              isPlaying = false;
+            });
+          }
+        },
+      );
       setState(() {
         isPlaying = true;
       });
@@ -71,6 +72,7 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Align(
       alignment: Alignment.centerRight,
       child: Container(

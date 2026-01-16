@@ -36,7 +36,9 @@ class DioHelper {
           return handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
+          if (error.response?.statusCode == 401 &&
+              !error.requestOptions.path.contains(ApiEndpoints.login) &&
+              !error.requestOptions.path.contains(ApiEndpoints.refreshToken)) {
             try {
               final refreshToken = await SharedprefHelper.getSecurityString(
                 StorageConstants.refreshToken,

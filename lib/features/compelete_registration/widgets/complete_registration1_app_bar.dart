@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/theming/text_style_manager.dart';
+
+import '../../auth/logic/cubit/register_cubit.dart';
 
 class CompleteRegistration1AppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -22,7 +25,7 @@ class CompleteRegistration1AppBar extends StatelessWidget
                 crossAxisAlignment: .end,
                 children: [
                   Text(
-                    "اهلا محمد,",
+                    "اهلا ${context.read<RegisterCubit>().nameController.text},",
                     style: TextStyleManager.font16MediumBlack,
                   ),
                   Text(

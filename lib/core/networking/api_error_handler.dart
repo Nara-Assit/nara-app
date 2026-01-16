@@ -51,15 +51,15 @@ class ApiErrorHandler {
           if (response != null) {
             final statusCode = response.statusCode ?? 500;
 
-            // 🔴 HANDLE UNAUTHORIZED HERE
-            if (statusCode == 401 || statusCode == 403) {
-              SharedprefHelper.clearAllSecuredData();
-              Go.offAll(const AuthScreen());
-              return ApiErrorModel(
-                message: "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.",
-                statusCode: statusCode,
-              );
-            }
+            // // 🔴 HANDLE UNAUTHORIZED HERE
+            // if (statusCode == 401 || statusCode == 403) {
+            //   SharedprefHelper.clearAllSecuredData();
+            //   Go.offAll(const AuthScreen());
+            //   return ApiErrorModel(
+            //     message: "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.",
+            //     statusCode: statusCode,
+            //   );
+            // }
 
             String message = "حدث خطأ غير متوقع من الخادم.";
             // Handle typical validation error structure: { errors: [{ field, message }, ...] }
