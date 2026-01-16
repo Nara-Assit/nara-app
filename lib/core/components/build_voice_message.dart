@@ -23,6 +23,7 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble>
   @override
   bool get wantKeepAlive => true;
   @override
+  @override
   void initState() {
     super.initState();
     _playerController.preparePlayer(
