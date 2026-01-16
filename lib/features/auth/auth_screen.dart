@@ -38,10 +38,10 @@ class AuthScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 30.h),
-              Expanded(
+              const Expanded(
                 child: TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [const LoginWidget(), RegisterWidget()],
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [LoginWidget(), RegisterWidget()],
                 ),
               ),
             ],

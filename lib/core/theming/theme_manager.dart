@@ -23,6 +23,7 @@ class ThemeManager {
       leadingWidth: 77.w,
       titleSpacing: 0,
       centerTitle: true,
+      surfaceTintColor: Colors.transparent,
     ),
     textTheme: GoogleFonts.alexandriaTextTheme(),
   );

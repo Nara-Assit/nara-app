@@ -5,9 +5,7 @@ import 'package:nara/core/helpers/storage_constants.dart';
 import 'package:nara/core/networking/base_model.dart';
 import 'package:nara/core/helpers/toast_messages.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
-
 import '../networking/api_error_handler.dart';
-
 import '../networking/api_endpoints.dart';
 import 'sharedpref_helper.dart';
 
@@ -32,12 +30,44 @@ class DioHelper {
           final token = await SharedprefHelper.getSecurityString(
             StorageConstants.savedToken,
           );
-
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-
           return handler.next(options);
+        },
+        onError: (error, handler) async {
+          if (error.response?.statusCode == 401 &&
+              !error.requestOptions.path.contains(ApiEndpoints.login) &&
+              !error.requestOptions.path.contains(ApiEndpoints.refreshToken)) {
+            try {
+              final refreshToken = await SharedprefHelper.getSecurityString(
+                StorageConstants.refreshToken,
+              );
+
+              final response = await dio.post(
+                ApiEndpoints.baseUrl + ApiEndpoints.refreshToken,
+                data: {"refreshToken": refreshToken},
+              );
+              final newToken = response.data['data']['accessToken'];
+              final newRefreshToken = response.data['data']['refreshToken'];
+              await SharedprefHelper.setSecurityString(
+                StorageConstants.savedToken,
+                newToken,
+              );
+              await SharedprefHelper.setSecurityString(
+                StorageConstants.refreshToken,
+                newRefreshToken,
+              );
+              error.requestOptions.headers['Authorization'] =
+                  'Bearer $newToken';
+              final retryResponse = await dio.fetch(error.requestOptions);
+              return handler.resolve(retryResponse);
+            } catch (e) {
+              return handler.reject(error);
+            }
+          }
+
+          return handler.next(error);
         },
       ),
     );

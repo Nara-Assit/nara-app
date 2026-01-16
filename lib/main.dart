@@ -37,7 +37,7 @@ class NaraApp extends StatelessWidget {
           theme: ThemeManager().lightTheme,
 
           navigatorObservers: [AppNavigationObserver()],
-          home: const SplashScreen(),
+          home: const SignInUpScreen(),
         );
       },
     );

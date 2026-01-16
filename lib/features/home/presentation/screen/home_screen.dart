@@ -1,117 +1,123 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/core/components/custom_build_messages.dart';
 import 'package:nara/core/helpers/app_assets.dart';
 import 'package:nara/core/theming/color_manager.dart';
-import 'package:nara/features/home/business%20logic/change_text_voice_cubit.dart';
-import 'package:nara/features/home/business%20logic/change_text_voice_state.dart';
 import 'package:nara/features/home/presentation/widgets/custom_chat_widget.dart';
 import '../../../../core/components/build_voice_message.dart';
 import '../../../../core/components/custom_app_bar.dart';
 import '../../../../core/get_it.dart' as di;
+import '../../business logic/change_text_voice_cubit.dart';
+import '../../business logic/change_text_voice_state.dart';
+import '../../data/models/message_model.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
   final TextEditingController _controller = TextEditingController();
-  final List<MessageModel> messages = [];
-  void _sendTextMessage(ChangeTextVoiceCubit cubit) {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    setState(() {
-      messages.add(
-        MessageModel(
-          type: MessageType.text,
-          content: text,
-        ),
-      );
-    });
-    _controller.clear();
-
-    cubit.changeTextToVoice(text);
-  }
-
-  void _addVoiceMessage(String path) {
-    setState(() {
-      messages.add(
-        MessageModel(
-          type: MessageType.voice,
-          content: path,
-        ),
-      );
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ChangeTextVoiceCubit>(
-      create: (_) => di.setUp<ChangeTextVoiceCubit>(),
+    void sendMessage(ChangeTextVoiceCubit cubit) {
+      final text = _controller.text.trim();
+      if (text.isEmpty || cubit.state is ChangeTextVoiceLoading) return;
+      cubit.changeTextToVoice(text);
+      _controller.clear();
+    }
+
+    return BlocProvider(
+      create: (context) => di.setUp<ChangeTextVoiceCubit>()..loadMessages(),
       child: Builder(
         builder: (context) {
-          final cubit = context.read<ChangeTextVoiceCubit>();
-
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             backgroundColor: ColorManager.whiteColors,
             appBar: const CustomAppBar(
               pathAsset: AppAssets.imagesCommunityIcon,
             ),
-            body: BlocListener<ChangeTextVoiceCubit, ChangeTextVoiceState>(
-              listener: (context, state) {
-                if (state is ChangeTextVoiceStateSuccess) {
-                  _addVoiceMessage(state.changeTextToSpeachModel.publicUrl);
-                }
-
-                if (state is ChangeTextVoiceStateError) {
-                  // ممكن هنا SnackBar أو Toast
-                }
-              },
+            body: SafeArea(
               child: Column(
                 children: [
-                  if (messages.isEmpty) ...[
-                    const Spacer(),
-                    Center(
-                      child: Image.asset(AppAssets.imagesMain),
-                    ),
-                  ],
-
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24.w,
-                        vertical: 20.h,
-                      ),
-                      child: ListView.separated(
-                        itemCount: messages.length,
-                        separatorBuilder: (_, _) => SizedBox(height: 12.h),
-                        itemBuilder: (context, index) {
-                          final msg = messages[index];
+                    child: CustomScrollView(
+                      slivers: [
+                        BlocConsumer<
+                          ChangeTextVoiceCubit,
+                          ChangeTextVoiceState
+                        >(
+                          listener: (context, state) {
+                            if (state is ChangeTextVoiceError &&
+                                state.failedMessage != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed to send message!'),
+                                ),
+                              );
+                              log("home screen${state.toString()}");
+                            }
+                          },
+                          builder: (context, state) {
+                            final messages = state.messages;
 
-                          if (msg.type == MessageType.text) {
-                            return buildMesaage(msg.content);
-                          } else {
-                            return VoiceMessageBubble(path: msg.content);
-                          }
-                        },
-                      ),
+                            if (messages.isEmpty) {
+                              return SliverFillRemaining(
+                                child: Center(
+                                  child: Image.asset(AppAssets.imagesMain),
+                                ),
+                              );
+                            }
+                            return SliverPadding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24.w,
+                                vertical: 20.h,
+                              ),
+                              sliver: SliverList.separated(
+                                itemCount: messages.length,
+                                separatorBuilder: (_, _) =>
+                                    SizedBox(height: 12.h),
+                                itemBuilder: (context, index) {
+                                  final msg = messages[index];
+                                  if (msg.type == MessageType.text) {
+                                    if (msg.status == MessageStatus.failure) {
+                                      return TextButton(
+                                        onPressed: () {
+                                          context
+                                              .read<ChangeTextVoiceCubit>()
+                                              .retryMessage(msg);
+                                        },
+                                        child: const Text(
+                                          "Retry",
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return buildMesaage(msg.content);
+                                  } else {
+                                    return VoiceMessageBubble(
+                                      path: msg.content,
+                                    );
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-
+                  SizedBox(
+                    height: 16.h,
+                  ),
                   CustomChatWidget(
+                    sendMessage: () => sendMessage(
+                      context.read<ChangeTextVoiceCubit>(),
+                    ),
                     controller: _controller,
-                    sendMessage: () => _sendTextMessage(cubit),
-                    onSendVoice: _addVoiceMessage,
+                    onSendVoice: (path) =>
+                        context.read<ChangeTextVoiceCubit>().sendVoice(path),
                   ),
                 ],
               ),
@@ -121,13 +127,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-enum MessageType { text, voice }
-
-class MessageModel {
-  final MessageType type;
-  final String content;
-
-  MessageModel({required this.type, required this.content});
 }

@@ -27,6 +27,7 @@ class Go {
     return _navigatorKey.currentState!.push<T>(
       _pageRouter.build(
         page,
+        settings: RouteSettings(name: '/${page.runtimeType}'),
         transition: transition,
         options: options,
       ),
@@ -58,6 +59,7 @@ class Go {
     return _navigatorKey.currentState!.pushReplacement<T, TO>(
       _pageRouter.build(
         page,
+        settings: RouteSettings(name: '/${page.runtimeType}'),
         transition: transition,
         options: options,
       ),
@@ -92,6 +94,7 @@ class Go {
     return _navigatorKey.currentState!.pushAndRemoveUntil<T>(
       _pageRouter.build(
         page,
+        settings: RouteSettings(name: '/${page.runtimeType}'),
         transition: transition,
         options: options,
       ),
@@ -127,6 +130,7 @@ class Go {
     return _navigatorKey.currentState!.pushAndRemoveUntil<T>(
       _pageRouter.build(
         page,
+        settings: RouteSettings(name: '/${page.runtimeType}'),
         transition: transition,
         options: options,
       ),

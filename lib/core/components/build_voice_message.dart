@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theming/color_manager.dart';
+import 'voice_manager.dart';
 
 class VoiceMessageBubble extends StatefulWidget {
   final String path;
@@ -9,28 +11,28 @@ class VoiceMessageBubble extends StatefulWidget {
     super.key,
     required this.path,
   });
-
   @override
   State<VoiceMessageBubble> createState() => _VoiceMessageBubbleState();
 }
 
-class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
-  late final PlayerController _playerController;
+class _VoiceMessageBubbleState extends State<VoiceMessageBubble>
+    with AutomaticKeepAliveClientMixin {
+  final PlayerController _playerController = PlayerController();
   bool isPlaying = false;
+  StreamSubscription<PlayerState>? _playerStateSubscription;
+  @override
+  bool get wantKeepAlive => true;
   @override
   @override
   void initState() {
     super.initState();
-    _playerController = PlayerController();
-
     _playerController.preparePlayer(
       path: widget.path,
-      shouldExtractWaveform: true,
     );
-
-    _playerController.onPlayerStateChanged.listen((state) {
+    _playerStateSubscription = _playerController.onPlayerStateChanged.listen((
+      state,
+    ) {
       if (state == PlayerState.stopped) {
-        _playerController.seekTo(0);
         setState(() {
           isPlaying = false;
         });
@@ -40,12 +42,38 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
 
   @override
   void dispose() {
+    _playerStateSubscription?.cancel();
     _playerController.dispose();
     super.dispose();
   }
 
+  void _togglePlayPause() async {
+    if (isPlaying) {
+      await _playerController.pausePlayer();
+      setState(() {
+        isPlaying = false;
+      });
+    } else {
+      await VoiceMessageManager.playNew(
+        _playerController,
+        widget.path,
+        () {
+          if (mounted) {
+            setState(() {
+              isPlaying = false;
+            });
+          }
+        },
+      );
+      setState(() {
+        isPlaying = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Align(
       alignment: Alignment.centerRight,
       child: Container(
@@ -62,14 +90,7 @@ class _VoiceMessageBubbleState extends State<VoiceMessageBubble> {
                 isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
               ),
-              onPressed: () {
-                isPlaying
-                    ? _playerController.pausePlayer()
-                    : _playerController.startPlayer();
-                setState(() {
-                  isPlaying = !isPlaying;
-                });
-              },
+              onPressed: _togglePlayPause,
             ),
             AudioFileWaveforms(
               size: Size(200.w, 40.h),

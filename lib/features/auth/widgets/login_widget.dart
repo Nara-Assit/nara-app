@@ -21,9 +21,15 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
