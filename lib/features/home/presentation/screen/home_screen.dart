@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return Scaffold(
-            resizeToAvoidBottomInset: true,
+            //resizeToAvoidBottomInset: true,
             backgroundColor: ColorManager.whiteColors,
             appBar: const CustomAppBar(
               pathAsset: AppAssets.imagesCommunityIcon,
@@ -50,7 +50,9 @@ class HomeScreen extends StatelessWidget {
                                 state.failedMessage != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Failed to send message!'),
+                                  content: Text(
+                                    'فشل في إرسال لرسالة. الرجاء المحاولة مرة أخرى.',
+                                  ),
                                 ),
                               );
                               log("home screen${state.toString()}");
@@ -77,23 +79,25 @@ class HomeScreen extends StatelessWidget {
                                     SizedBox(height: 12.h),
                                 itemBuilder: (context, index) {
                                   final msg = messages[index];
-                                  if (msg.type == MessageType.text) {
-                                    if (msg.status == MessageStatus.failure) {
-                                      return TextButton(
-                                        onPressed: () {
-                                          context
-                                              .read<ChangeTextVoiceCubit>()
-                                              .retryMessage(msg);
-                                        },
-                                        child: const Text(
-                                          "Retry",
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            color: Colors.black,
-                                          ),
+
+                                  if (state is ChangeTextVoiceError &&
+                                      state.failedMessage == msg) {
+                                    return TextButton(
+                                      onPressed: () {
+                                        context
+                                            .read<ChangeTextVoiceCubit>()
+                                            .retryMessage(msg);
+                                      },
+                                      child: const Text(
+                                        "حاول مرة أخرى",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.red,
                                         ),
-                                      );
-                                    }
+                                      ),
+                                    );
+                                  }
+                                  if (msg.type == MessageType.text) {
                                     return buildMesaage(msg.content);
                                   } else {
                                     return VoiceMessageBubble(
@@ -116,8 +120,8 @@ class HomeScreen extends StatelessWidget {
                       context.read<ChangeTextVoiceCubit>(),
                     ),
                     controller: _controller,
-                    onSendVoice: (path) =>
-                        context.read<ChangeTextVoiceCubit>().sendVoice(path),
+                    onSendVoice: (file) =>
+                        context.read<ChangeTextVoiceCubit>().sendVoice(file),
                   ),
                 ],
               ),

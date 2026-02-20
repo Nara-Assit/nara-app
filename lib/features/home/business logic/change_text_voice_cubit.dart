@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nara/features/home/business%20logic/change_text_voice_state.dart';
 import 'package:nara/features/home/data/repositiries/change_text_to_voice_repo.dart';
@@ -23,7 +25,6 @@ class ChangeTextVoiceCubit extends Cubit<ChangeTextVoiceState> {
       ),
     );
     await LocalDatabaseHelper.insertMessage(userMessage);
-
     emit(ChangeTextVoiceLoading(updatedMessages));
 
     final result = await changeTextToVoiceRepo.changeTextToVoice(text);
@@ -37,16 +38,15 @@ class ChangeTextVoiceCubit extends Cubit<ChangeTextVoiceState> {
             messages: updatedMessages,
           ),
         );
+        
       },
       (voice) async {
         final botMessage = MessageModel(
           type: MessageType.voice,
-          content: voice.publicUrl,
+          content: voice.publicUrl!,
           sender: 'bot',
         );
-
         await LocalDatabaseHelper.insertMessage(botMessage);
-
         emit(
           ChangeTextVoiceSuccess(
             messages: [...updatedMessages, botMessage],
@@ -56,14 +56,52 @@ class ChangeTextVoiceCubit extends Cubit<ChangeTextVoiceState> {
     );
   }
 
-  Future<void> sendVoice(String path) async {
-    final voiceMessage = MessageModel(
+  Future<void> sendVoice(File audioFile) async {
+    // user voice message
+    final userVoiceMessage = MessageModel(
       type: MessageType.voice,
-      content: path,
-      sender: 'bot',
+      content: audioFile.path,
+      sender: 'user',
     );
-    await LocalDatabaseHelper.insertMessage(voiceMessage);
-    emit(ChangeTextVoiceSuccess(messages: [...state.messages, voiceMessage]));
+
+    final updatedMessages = [...state.messages, userVoiceMessage];
+
+    emit(ChangeTextVoiceSuccess(messages: updatedMessages));
+
+    await LocalDatabaseHelper.insertMessage(userVoiceMessage);
+
+    emit(ChangeTextVoiceLoading(updatedMessages));
+
+    //  send to STT
+    final result = await changeTextToVoiceRepo.voiceToText(audioFile);
+
+    result.fold(
+      (error) {
+        emit(
+          ChangeTextVoiceError(
+            error: error,
+            failedMessage: userVoiceMessage,
+            messages: updatedMessages,
+          ),
+        );
+      },
+      (textResponse) async {
+        //  bot text message
+        final botTextMessage = MessageModel(
+          type: MessageType.text,
+          content: textResponse.transcription!,
+          sender: 'bot',
+        );
+
+        await LocalDatabaseHelper.insertMessage(botTextMessage);
+
+        emit(
+          ChangeTextVoiceSuccess(
+            messages: [...updatedMessages, botTextMessage],
+          ),
+        );
+      },
+    );
   }
 
   void retryMessage(MessageModel failedMessage) {
@@ -77,5 +115,4 @@ class ChangeTextVoiceCubit extends Cubit<ChangeTextVoiceState> {
 
     emit(ChangeTextVoiceSuccess(messages: messages));
   }
-  
 }

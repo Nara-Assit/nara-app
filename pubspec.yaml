@@ -57,6 +57,7 @@ dependencies:
   audio_waveforms: ^2.0.1
   get_it: ^9.2.0
   path: ^1.9.1
+  tflite_flutter: ^0.12.1
 
 
 dev_dependencies:

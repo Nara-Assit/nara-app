@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nara/features/home/presentation/widgets/chat_text_form_field.dart';
@@ -10,7 +11,7 @@ import '../../../../core/theming/color_manager.dart';
 
 class CustomChatWidget extends StatefulWidget {
   final VoidCallback sendMessage;
-  final Function(String voicePath) onSendVoice;
+  final Function(File fileAudio) onSendVoice;
 
   final TextEditingController controller;
   const CustomChatWidget({
@@ -66,7 +67,8 @@ class _CustomChatWidgetState extends State<CustomChatWidget> {
       seconds = 0;
     });
     if (send && path != null) {
-      widget.onSendVoice(path);
+      final audioFile = File(path);
+      widget.onSendVoice(audioFile);
       log('Send voice file: $path');
     } else {
       log("Recording cancelled");
